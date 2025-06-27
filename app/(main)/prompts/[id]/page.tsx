@@ -36,7 +36,7 @@ export default function PromptDetailPage() {
         
         setPrompt({
           ...result,
-          tags: result.tags ?? []  // tags가 없으면 빈 배열로 설정
+          tags: 'tags' in result && Array.isArray((result as any).tags) ? (result as any).tags : []
         })
         
         // 조회수 추적 (백그라운드에서 실행)
