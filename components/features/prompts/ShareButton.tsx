@@ -25,7 +25,7 @@ export default function ShareButton({ promptId, isPublic, shareId, title }: Shar
   const handleToggleShare = async () => {
     try {
       setLoading(true)
-      const result = await togglePromptShareAction(promptId)
+      const result = await togglePromptShareAction(Number(promptId))
       setShareData(result)
       showToast(result.message, 'success')
       
