@@ -1,0 +1,275 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 사용자 역할을 정의하는 Enum
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN  // 슈퍼 관리자 추가
+}
+
+// 사용자 모델 (NextAuth.js 호환)
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // 이메일/비밀번호 로그인용
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // 계정 만료 관련
+  isActive      Boolean   @default(true)    // 계정 활성화 상태
+  expiresAt     DateTime? // 계정 만료일 (null이면 무제한)
+  deactivatedAt DateTime? // 비활성화된 일시
+  deactivatedBy String?   // 비활성화한 관리자 ID
+
+  // 관계
+  accounts Account[]
+  sessions Session[]
+  prompts  Prompt[]
+  tags     Tag[]
+  createdInviteCodes InviteCode[] @relation("CreatedInviteCodes")
+  consents UserConsent[] // 사용자 동의 관계 추가
+  adminAccessLogs AdminAccessLog[] @relation("AdminAccess") // 관리자로서의 접근 로그
+  targetAccessLogs AdminAccessLog[] @relation("AccessTarget") // 조회 대상으로서의 로그
+  banners Banner[] // 생성한 배너 관계
+  notices Notice[] // 생성한 공지사항 관계
+
+  @@index([isActive])
+  @@index([expiresAt])
+  @@map("users")
+}
+
+// 초대 코드 모델
+model InviteCode {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  email     String?  // 특정 이메일에만 사용 가능하게 제한 (선택사항)
+  isUsed    Boolean  @default(false)
+  usedBy    String?  // 사용한 사용자 이메일
+  usedAt    DateTime?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  // 생성자 관계
+  createdById String
+  createdBy   User   @relation("CreatedInviteCodes", fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([code])
+  @@index([expiresAt])
+  @@map("invite_codes")
+}
+
+// 프롬프트 모델 (사용자별 분리)
+model Prompt {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  category    String
+  subCategory String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 공유 관련 필드
+  shareId     String?  @unique // 공유 링크용 고유 ID
+  isPublic    Boolean  @default(false) // 공개 여부
+  sharedAt    DateTime? // 공유 시작 시간
+
+  // 분석 및 통계 필드
+  viewCount   Int      @default(0) // 조회수
+  copyCount   Int      @default(0) // 복사 횟수
+  lastViewed  DateTime? // 마지막 조회 시간
+  lastCopied  DateTime? // 마지막 복사 시간
+
+  // 사용자 관계
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 태그 관계
+  tags Tag[] @relation("PromptTags")
+
+  @@index([createdAt])
+  @@index([userId])
+  @@index([category])
+  @@index([shareId])
+  @@index([isPublic])
+  @@index([viewCount])
+  @@index([copyCount])
+  @@index([lastViewed])
+  @@map("prompts")
+}
+
+// 태그 모델 (사용자별 분리)
+model Tag {
+  id   String @id @default(uuid())
+  name String
+
+  // 사용자 관계
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 프롬프트 관계
+  prompts Prompt[] @relation("PromptTags")
+
+  @@unique([name, userId]) // 사용자별로 태그명 고유
+  @@map("tags")
+}
+
+// NextAuth.js 필수 모델들
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// 사용자 동의 관리 모델 (법적 보호)
+model UserConsent {
+  id          String   @id @default(uuid())
+  userId      String
+  consentType String   // 'terms', 'privacy', 'admin_access', 'data_processing'
+  version     String   // 동의서 버전 (예: "v1.0", "v1.1")
+  agreed      Boolean
+  agreedAt    DateTime @default(now())
+  ipAddress   String?  // 동의한 IP 주소 (법적 증거)
+  userAgent   String?  // 브라우저 정보 (법적 증거)
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, consentType, version]) // 사용자별 동의 유형별 버전별 고유
+  @@index([userId])
+  @@index([consentType])
+  @@index([version])
+  @@map("user_consents")
+}
+
+// 관리자 데이터 접근 로그 (감사 추적)
+model AdminAccessLog {
+  id           String   @id @default(uuid())
+  adminId      String   // 관리자 사용자 ID
+  targetUserId String   // 조회 대상 사용자 ID
+  action       String   // 'view_prompts', 'view_profile', 'view_analytics' 등
+  reason       String?  // 접근 사유 (예: "교육 품질 관리", "부적절 콘텐츠 신고 처리")
+  ipAddress    String?  // 관리자 IP 주소
+  userAgent    String?  // 관리자 브라우저 정보
+  accessedData String?  // 접근한 데이터 요약 (JSON)
+  createdAt    DateTime @default(now())
+  
+  admin      User @relation("AdminAccess", fields: [adminId], references: [id])
+  targetUser User @relation("AccessTarget", fields: [targetUserId], references: [id])
+  
+  @@index([adminId])
+  @@index([targetUserId])
+  @@index([createdAt])
+  @@index([action])
+  @@map("admin_access_logs")
+}
+
+// 동의서 버전 관리 모델
+model ConsentVersion {
+  id          String   @id @default(uuid())
+  type        String   // 'terms', 'privacy', 'admin_access', 'data_processing'
+  version     String   // "v1.0", "v1.1" 등
+  title       String   // 동의서 제목
+  content     String   @db.Text // 동의서 전문
+  isActive    Boolean  @default(true) // 현재 활성 버전인지
+  createdAt   DateTime @default(now())
+  activatedAt DateTime? // 활성화된 시각
+  
+  @@unique([type, version])
+  @@index([type])
+  @@index([isActive])
+  @@map("consent_versions")
+}
+
+// 배너 관리 모델 (관리자가 추가/편집)
+model Banner {
+  id          String   @id @default(uuid())
+  title       String   // 배너 제목
+  description String?  // 배너 설명
+  url         String   // 링크 URL
+  imageUrl    String?  // 배너 이미지 URL (선택사항)
+  isActive    Boolean  @default(true) // 활성화 상태
+  order       Int      @default(0) // 정렬 순서
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 생성자 관계
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  
+  @@index([isActive])
+  @@index([order])
+  @@index([createdAt])
+  @@map("banners")
+}
+
+// 공지사항 관리 모델 (관리자가 추가/편집)
+model Notice {
+  id          String   @id @default(uuid())
+  title       String   // 공지사항 제목
+  content     String   @db.Text // 공지사항 내용
+  category    String   @default("general") // "general", "maintenance", "update", "urgent"
+  isImportant Boolean  @default(false) // 중요 공지 여부 (메인 페이지 상단 표시)
+  isActive    Boolean  @default(true) // 활성화 상태
+  viewCount   Int      @default(0) // 조회수
+  order       Int      @default(0) // 정렬 순서
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 생성자 관계
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  
+  @@index([isActive])
+  @@index([category])
+  @@index([isImportant])
+  @@index([order])
+  @@index([createdAt])
+  @@map("notices")
+} 

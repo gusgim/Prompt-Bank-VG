@@ -1,0 +1,34 @@
+# 프롬프트 뱅크 시스템 - Cursor AI 규칙
+
+이 프로젝트는 **프롬프트 뱅크 시스템**입니다.
+
+## 🎯 핵심 정보
+- **프로젝트**: Prompt Bank of 뱅가드AI경매
+- **기술스택**: Next.js 14, TypeScript, Prisma, PostgreSQL, NextAuth.js v5
+- **아키텍처**: 서버 액션 기반 풀스택 애플리케이션
+- **인증**: NextAuth.js v5 (역할 기반: USER, ADMIN)
+
+## 🔧 개발 원칙
+1. **서버 액션 우선 사용** (API 라우트는 관리자 기능만)
+2. **사용자별 데이터 분리** (멀티테넌트)
+3. **타입 안전성 보장** (TypeScript strict)
+4. **보안 우선** (모든 액션에서 인증 확인)
+
+## 📁 주요 구조
+```
+app/(main)/prompts/     # 프롬프트 관리 페이지
+app/api/admin/          # 관리자 전용 API
+components/features/    # 기능별 컴포넌트
+lib/actions.ts          # 서버 액션 모음
+```
+
+## 🎨 UI 가이드
+- **브랜드 컬러**: Lush Lava (#FF4500), Navy Blue (#000080)
+- **태그 스타일**: 그라데이션 배경 (orange-400 to red-500)
+
+## 🔐 보안 규칙
+- 모든 서버 액션에서 `await auth()` 인증 확인
+- 사용자별 데이터 접근 시 `userId` 필터링 필수
+- 관리자 기능은 `role === 'ADMIN'` 확인
+
+상세한 규칙은 `.cursor/rules/prompt-bank-system-rules.md` 참조 
