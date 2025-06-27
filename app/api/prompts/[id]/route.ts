@@ -15,7 +15,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   try {
     const prompt = await prisma.prompt.findFirst({
       where: { 
-        id: params.id,
+        id: Number(params.id),
         userId: session.user.id // 현재 사용자의 프롬프트만 조회
       },
       include: { tags: true },
