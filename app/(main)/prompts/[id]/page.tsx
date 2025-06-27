@@ -34,7 +34,10 @@ export default function PromptDetailPage() {
         const result = await getPromptByIdAction(promptId)
         console.log('✅ 프롬프트 상세 로딩 성공:', result)
         
-        setPrompt(result)
+        setPrompt({
+          ...result,
+          tags: result.tags ?? []  // tags가 없으면 빈 배열로 설정
+        })
         
         // 조회수 추적 (백그라운드에서 실행)
         try {
