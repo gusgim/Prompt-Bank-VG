@@ -60,7 +60,7 @@ export function PromptCard({ prompt, onDelete }: PromptCardProps) {
       setIsDeleting(true)
       setShowDeleteModal(false)
 
-      await deletePromptAction(prompt.id)
+      await deletePromptAction(prompt.id.toString())
       
       console.log('✅ 프롬프트 삭제 성공')
       showToast('프롬프트가 삭제되었습니다.', 'success')
