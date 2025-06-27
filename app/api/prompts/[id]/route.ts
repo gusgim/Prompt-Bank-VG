@@ -47,11 +47,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         }
 
         const existingPrompt = await prisma.prompt.findFirst({ 
-            where: { 
-                id: params.id,
-                userId: session.user.id // 현재 사용자의 프롬프트만 수정 가능
-            }, 
-            include: { tags: true } 
+            where: {
+                id: Number(params.id), // <- 여기도 숫자로 변환!
+                userId: session.user.id,
+              },
+              include: { tags: true }
         });
         
         if (!existingPrompt) {
@@ -80,7 +80,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         }
 
         const updatedPrompt = await prisma.prompt.update({
-            where: { id: params.id },
+            where: { id: Number(params.id) }, // ✅ 숫자 변환 필요
             data: {
                 title,
                 content,
@@ -113,8 +113,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     try {
         const promptToDelete = await prisma.prompt.findFirst({
             where: { 
-                id: params.id,
-                userId: session.user.id // 현재 사용자의 프롬프트만 삭제 가능
+                id: Number(params.id), // ✅ 숫자 변환
+                userId: session.user.id
             },
             include: { tags: true },
         });
@@ -129,7 +129,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
         await prisma.$transaction(async (tx) => {
             // 1. Delete the prompt
             await tx.prompt.delete({
-                where: { id: params.id },
+                where: { id: Number(params.id) } // ✅ 숫자 변환
             });
 
             // 2. Check and delete orphan tags (사용자별로)
