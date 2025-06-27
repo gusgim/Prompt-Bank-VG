@@ -68,7 +68,7 @@ export default function PromptDetailPage() {
       
       // 복사 횟수 추적 (백그라운드에서 실행)
       try {
-        await trackPromptCopyAction(prompt.id)
+        await trackPromptCopyAction(String(prompt.id))
       } catch (trackError) {
         console.warn('복사 추적 실패:', trackError)
         // 복사 추적 실패해도 복사 기능은 정상 동작
