@@ -556,11 +556,11 @@ export function UserDetailModal({ isOpen, onClose, userId, userName }: UserDetai
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
                         {Object.entries(activityAnalysis.tagFrequency)
-                          .sort(([,a], [,b]) => (b as number) - (a as number))
+                          .sort(([, a], [, b]) => (b as number) - (a as number))
                           .slice(0, 15)
                           .map(([tag, count]) => (
                             <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag} ({count})
+                              {tag} ({String(count)})
                             </Badge>
                           ))}
                       </div>
