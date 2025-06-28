@@ -8,83 +8,71 @@ import { auth } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// 동적 메타데이터 생성 함수
-function generateMetadata(): Metadata {
-  // Vercel 환경에서의 기본 URL
-  const baseUrl = process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}` 
-    : 'https://prompt-bank-vg-dun.vercel.app';
-  
-  const imageUrl = `${baseUrl}/golden-gate-bridge.jpg`;
-
-  return {
-    title: "Prompt Bank of 뱅가드AI경매",
-    description: "AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템",
-    keywords: ["프롬프트 뱅크", "AI", "부동산경매", "뱅가드AI경매", "프롬프트 관리"],
-    authors: [{ name: "뱅가드AI경매" }],
-    creator: "뱅가드AI경매",
-    publisher: "뱅가드AI경매",
-    formatDetection: {
-      email: false,
-      address: false,
-      telephone: false,
-    },
-    metadataBase: new URL(baseUrl),
-    icons: {
-      icon: [
-        { url: '/favicon.ico' },
-        { url: '/icon-16x16.png', sizes: '16x16', type: 'image/png' },
-        { url: '/icon-32x32.png', sizes: '32x32', type: 'image/png' },
-      ],
-      apple: [
-        { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-      ],
-      other: [
-        { rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#FF4500' },
-      ],
-    },
-    manifest: '/site.webmanifest',
-    openGraph: {
-      type: 'website',
-      locale: 'ko_KR',
-      url: baseUrl,
-      title: 'Prompt Bank of 뱅가드AI경매',
-      description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
-      siteName: 'Prompt Bank of 뱅가드AI경매',
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: 'Prompt Bank of 뱅가드AI경매 - AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Prompt Bank of 뱅가드AI경매',
-      description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
-      images: [imageUrl],
-      creator: '@vanguard_ai',
-    },
-    robots: {
+export const metadata: Metadata = {
+  title: "Prompt Bank of 뱅가드AI경매",
+  description: "AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템",
+  keywords: ["프롬프트 뱅크", "AI", "부동산경매", "뱅가드AI경매", "프롬프트 관리"],
+  authors: [{ name: "뱅가드AI경매" }],
+  creator: "뱅가드AI경매",
+  publisher: "뱅가드AI경매",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://prompt-bank-vg-dun.vercel.app'),
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      { rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#FF4500' },
+    ],
+  },
+  manifest: '/site.webmanifest',
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    url: 'https://prompt-bank-vg-dun.vercel.app',
+    title: 'Prompt Bank of 뱅가드AI경매',
+    description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
+    siteName: 'Prompt Bank of 뱅가드AI경매',
+    images: [
+      {
+        url: 'https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Prompt Bank of 뱅가드AI경매 - AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Prompt Bank of 뱅가드AI경매',
+    description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
+    images: ['https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg'],
+    creator: '@vanguard_ai',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
       index: true,
       follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
-    verification: {
-      google: process.env.GOOGLE_SITE_VERIFICATION,
-    },
-  };
-}
-
-export const metadata = generateMetadata();
+  },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+  },
+};
 
 export default async function RootLayout({
   children,
