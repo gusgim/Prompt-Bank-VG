@@ -18,16 +18,12 @@ interface FilterSidebarProps {
   tags: string[]
 }
 
-// 카테고리 한글 매핑
+// 카테고리 한글 매핑 - 실제 사용되는 카테고리만 유지
 const categoryLabels: Record<string, string> = {
   'real_estate': '부동산',
   'coding': '코딩',
   'general': '일반',
-  'writing': '글쓰기',
-  'business': '비즈니스',
-  'education': '교육',
-  'marketing': '마케팅',
-  'design': '디자인'
+  'writing': '글쓰기'
 }
 
 // 카테고리 표시명을 가져오는 함수

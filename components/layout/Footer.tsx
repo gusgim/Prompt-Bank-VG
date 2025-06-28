@@ -19,11 +19,10 @@ export function Footer({ isDark = false }: FooterProps) {
           <div className="space-y-2">
             <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-center gap-2`}>
               <Award className="h-5 w-5 text-[#FF4500]" />
-              AI × 부동산경매 전문 강사
+              DUX.AI
             </h3>
             <p className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-600'} max-w-2xl mx-auto leading-relaxed`}>
-              인공지능 기술과 부동산경매를 접목한 혁신적인 교육을 제공합니다. 
-              실무 중심의 AI 활용법과 부동산경매 전략을 함께 배워보세요.
+              Drive. Understand. eXchange. Amplify Intelligence
             </p>
           </div>
 
@@ -36,7 +35,7 @@ export function Footer({ isDark = false }: FooterProps) {
               className="flex items-center gap-2 text-[#FF4500] hover:text-[#FF4500]/80 font-medium transition-colors"
             >
               <BookOpen className="h-4 w-4" />
-              뱅가드AI경매 블로그
+              덕스AI 블로그
               <ExternalLink className="h-3 w-3" />
             </Link>
             <span className={`hidden sm:block ${isDark ? 'text-gray-400' : 'text-gray-300'}`}>|</span>
@@ -55,7 +54,7 @@ export function Footer({ isDark = false }: FooterProps) {
             {/* 저작권 정보 */}
             <div className={`space-y-2 text-xs ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
               <p className="font-medium">
-                © {currentYear} <span className="text-[#FF4500] font-bold">뱅가드AI경매</span> Prompt Bank System
+                © {currentYear} <span className="text-[#FF4500] font-bold">덕스AI</span> Prompt Bank System
               </p>
               <p>
                 Developed with ❤️ for AI-powered Real Estate Auction Education

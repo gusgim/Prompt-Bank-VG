@@ -31,13 +31,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         authors: [prompt.author],
         images: [
           {
-            url: 'https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg',
+            url: '/og-image.png',
             width: 1200,
             height: 630,
-            alt: `${prompt.title} - Prompt Bank of 뱅가드AI경매`,
+            alt: `${prompt.title} - Prompt Bank of 덕스AI`,
           },
         ],
-        siteName: 'Prompt Bank of 뱅가드AI경매',
+        siteName: 'Prompt Bank of 덕스AI',
       },
       twitter: {
         card: 'summary_large_image',
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             url: 'https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg',
             width: 1200,
             height: 630,
-            alt: 'Prompt Bank of 뱅가드AI경매',
+            alt: 'Prompt Bank of 덕스AI',
           },
         ],
       },

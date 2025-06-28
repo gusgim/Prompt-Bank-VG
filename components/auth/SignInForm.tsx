@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -20,8 +20,18 @@ export function SignInForm({ className }: SignInFormProps) {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [rememberEmail, setRememberEmail] = useState(false)
   const router = useRouter()
   const { showToast } = useToast()
+
+  // 컴포넌트 마운트 시 저장된 이메일 불러오기
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail')
+    if (savedEmail) {
+      setEmail(savedEmail)
+      setRememberEmail(true)
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,6 +54,13 @@ export function SignInForm({ className }: SignInFormProps) {
           setError('이메일 또는 비밀번호가 올바르지 않습니다.')
         }
       } else {
+        // 로그인 성공 시 이메일 기억하기 처리
+        if (rememberEmail) {
+          localStorage.setItem('rememberedEmail', email)
+        } else {
+          localStorage.removeItem('rememberedEmail')
+        }
+
         // 로그인 성공 토스트 표시
         showToast('로그인에 성공했습니다! 환영합니다.', 'success')
         
@@ -93,6 +110,24 @@ export function SignInForm({ className }: SignInFormProps) {
               className="w-full bg-white/90 border-white/50 text-black placeholder:text-gray-500 focus:bg-white focus:border-blue-500"
               placeholder="비밀번호를 입력하세요"
             />
+          </div>
+
+          {/* 내 ID 기억하기 체크박스 */}
+          <div className="flex items-center space-x-2">
+            <input
+              id="remember-email"
+              type="checkbox"
+              checked={rememberEmail}
+              onChange={(e) => setRememberEmail(e.target.checked)}
+              disabled={isLoading}
+              className="h-4 w-4 text-[#000080] focus:ring-[#000080] border-gray-300 rounded"
+            />
+            <Label 
+              htmlFor="remember-email" 
+              className="text-sm text-white font-medium cursor-pointer"
+            >
+              내 ID 기억하기
+            </Label>
           </div>
 
           {error && (

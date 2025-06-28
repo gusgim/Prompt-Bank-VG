@@ -2,29 +2,29 @@ import { SignInForm } from '@/components/auth/SignInForm'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "로그인 - Prompt Bank of 뱅가드AI경매",
-  description: "AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템에 로그인하세요",
+  title: "로그인 - Prompt Bank of 덕스AI",
+  description: "AI 프롬프트 관리 시스템에 로그인하세요",
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     url: 'https://prompt-bank-vg-dun.vercel.app/auth/signin',
-    title: '로그인 - Prompt Bank of 뱅가드AI경매',
-    description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템에 로그인하세요',
-    siteName: 'Prompt Bank of 뱅가드AI경매',
+    title: '로그인 - Prompt Bank of 덕스AI',
+    description: 'AI 프롬프트 관리 시스템에 로그인하세요',
+    siteName: 'Prompt Bank of 덕스AI',
     images: [
       {
-        url: 'https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Prompt Bank of 뱅가드AI경매',
+        alt: 'Prompt Bank of 덕스AI',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: '로그인 - Prompt Bank of 뱅가드AI경매',
-    description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템에 로그인하세요',
-    images: ['https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg'],
+    title: '로그인 - Prompt Bank of 덕스AI',
+    description: 'AI 프롬프트 관리 시스템에 로그인하세요',
+    images: ['/og-image.png'],
   },
 }
 
@@ -64,7 +64,7 @@ export default function SignInPage() {
         <div className="text-center">
           <div className="bg-black/30 backdrop-blur-sm border border-white/30 rounded-lg p-3 shadow-2xl">
             <p className="text-xs text-white font-medium mb-1 drop-shadow-md">
-              © 2025 <span className="text-[#FF4500] font-bold">뱅가드AI경매</span> Prompt Bank System
+              © 2025 <span className="text-[#FF4500] font-bold">덕스AI</span> Prompt Bank System
             </p>
             <p className="text-xs text-white/90 drop-shadow-md">
               Developed with ❤️ for AI-powered Real Estate Auction Education
