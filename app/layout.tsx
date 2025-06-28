@@ -10,9 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 // 동적 메타데이터 생성 함수
 function generateMetadata(): Metadata {
+  // Vercel 환경에서의 기본 URL
   const baseUrl = process.env.VERCEL_URL 
     ? `https://${process.env.VERCEL_URL}` 
-    : process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    : 'https://prompt-bank-vg-dun.vercel.app';
   
   const imageUrl = `${baseUrl}/golden-gate-bridge.jpg`;
 
@@ -46,7 +47,7 @@ function generateMetadata(): Metadata {
     openGraph: {
       type: 'website',
       locale: 'ko_KR',
-      url: '/',
+      url: baseUrl,
       title: 'Prompt Bank of 뱅가드AI경매',
       description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
       siteName: 'Prompt Bank of 뱅가드AI경매',
