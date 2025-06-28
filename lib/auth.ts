@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs"
 import { authConfig } from "./auth.config"
 
 // 역할 타입 정의
-export type UserRole = 'USER' | 'ADMIN'
+export type UserRole = 'USER' | 'ADMIN' | 'SUPER_ADMIN'
 
 export const {
   handlers: { GET, POST },

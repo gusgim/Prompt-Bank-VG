@@ -38,7 +38,7 @@ export function PromptCard({ prompt, onDelete }: PromptCardProps) {
       
       // 복사 횟수 추적
       try {
-        await trackPromptCopyAction(prompt.id.toString())
+        await trackPromptCopyAction(prompt.id)
       } catch (trackError) {
         console.warn('복사 추적 실패:', trackError)
         // 추적 실패해도 복사 기능은 정상 동작
@@ -60,7 +60,7 @@ export function PromptCard({ prompt, onDelete }: PromptCardProps) {
       setIsDeleting(true)
       setShowDeleteModal(false)
 
-      await deletePromptAction(prompt.id.toString())
+      await deletePromptAction(prompt.id)
       
       console.log('✅ 프롬프트 삭제 성공')
       showToast('프롬프트가 삭제되었습니다.', 'success')

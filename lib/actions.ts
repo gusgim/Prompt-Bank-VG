@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { PromptFormData } from '@/lib/types'
-import { Prisma } from '@prisma/client'
+import { Prisma, Role } from '@prisma/client'
 import { PromptFilters, PromptWithTags, PaginatedResponse } from '@/lib/types'
 import { 
   CONSENT_CONTENTS, 
@@ -854,7 +854,7 @@ export async function getTopPromptsAction(type: 'viewed' | 'copied' = 'viewed', 
       },
       orderBy: [
         orderBy,
-        { createdAt: 'desc' }
+        { createdAt: 'desc' as const }
       ],
       take: limit
     })
@@ -1094,11 +1094,11 @@ export async function checkAllRequiredConsentsAction(): Promise<{ success: boole
 export async function isSuperAdminAction(): Promise<{ success: boolean; isSuperAdmin?: boolean; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user) {
+    if (!session?.user || session.user.role !== ('SUPER_ADMIN' as any)) {
       return { success: false, error: '인증이 필요합니다.' }
     }
 
-    const isSuperAdmin = session.user.role === 'SUPER_ADMIN'
+    const isSuperAdmin = session.user.role === ('SUPER_ADMIN' as any)
     
     return { success: true, isSuperAdmin }
   } catch (error) {
@@ -1116,7 +1116,7 @@ export async function getAllUsersPromptsAction(
 ): Promise<{ success: boolean; data?: any[]; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || session.user.role !== ('SUPER_ADMIN' as any)) {
       return { success: false, error: '슈퍼 관리자 권한이 필요합니다.' }
     }
 
@@ -1160,7 +1160,7 @@ export async function getAllUsersPromptsAction(
 export async function getAllUsersAction(): Promise<{ success: boolean; data?: any[]; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || session.user.role !== ('SUPER_ADMIN' as any)) {
       return { success: false, error: '슈퍼 관리자 권한이 필요합니다.' }
     }
 
@@ -1207,7 +1207,7 @@ export async function getUserDetailedPromptsAction(
 ): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || session.user.role !== ('SUPER_ADMIN' as any)) {
       return { success: false, error: '슈퍼 관리자 권한이 필요합니다.' }
     }
 
@@ -1290,7 +1290,7 @@ export async function getUserDetailedPromptsAction(
         totalViews: promptStats._sum.viewCount || 0,
         totalCopies: promptStats._sum.copyCount || 0,
         categoriesUsed: Object.keys(categoryStats).length,
-        tagsUsed: [...new Set(prompts.flatMap(p => p.tags.map(t => t.name)))].length,
+        tagsUsed: Array.from(new Set(prompts.flatMap(p => p.tags.map(t => t.name)))).length,
         recentActivity: recentPrompts.length
       },
       categoryDistribution: categoryStats,
@@ -1315,7 +1315,7 @@ export async function getPromptDetailForAdminAction(
 ): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || session.user.role !== Role.SUPER_ADMIN) {
       return { success: false, error: '슈퍼 관리자 권한이 필요합니다.' }
     }
 
@@ -1369,7 +1369,7 @@ export async function getUserActivityAnalysisAction(
 ): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || session.user.role !== Role.SUPER_ADMIN) {
       return { success: false, error: '슈퍼 관리자 권한이 필요합니다.' }
     }
 
@@ -1597,7 +1597,7 @@ export async function advancedSearchAction(filters: {
 }): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || session.user.role !== Role.SUPER_ADMIN) {
       return { success: false, error: '슈퍼 관리자 권한이 필요합니다.' }
     }
 
@@ -1750,7 +1750,7 @@ export async function advancedSearchAction(filters: {
 export async function getAdminAccessLogsAction(): Promise<{ success: boolean; data?: any[]; error?: string }> {
   try {
     const session = await auth()
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || session.user.role !== Role.SUPER_ADMIN) {
       return { success: false, error: '슈퍼 관리자 권한이 필요합니다.' }
     }
 

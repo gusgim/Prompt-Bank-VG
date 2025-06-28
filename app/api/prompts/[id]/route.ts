@@ -15,7 +15,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   try {
     const prompt = await prisma.prompt.findFirst({
       where: { 
-        id: Number(params.id),
+        id: params.id,
         userId: session.user.id // 현재 사용자의 프롬프트만 조회
       },
       include: { tags: true },
@@ -48,7 +48,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
         const existingPrompt = await prisma.prompt.findFirst({ 
             where: {
-                id: Number(params.id), // <- 여기도 숫자로 변환!
+                id: params.id,
                 userId: session.user.id,
               },
               include: { tags: true }
@@ -80,7 +80,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         }
 
         const updatedPrompt = await prisma.prompt.update({
-            where: { id: Number(params.id) }, // ✅ 숫자 변환 필요
+            where: { id: params.id },
             data: {
                 title,
                 content,
@@ -113,7 +113,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     try {
         const promptToDelete = await prisma.prompt.findFirst({
             where: { 
-                id: Number(params.id), // ✅ 숫자 변환
+                id: params.id,
                 userId: session.user.id
             },
             include: { tags: true },
@@ -129,7 +129,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
         await prisma.$transaction(async (tx) => {
             // 1. Delete the prompt
             await tx.prompt.delete({
-                where: { id: Number(params.id) } // ✅ 숫자 변환
+                where: { id: params.id }
             });
 
             // 2. Check and delete orphan tags (사용자별로)

@@ -45,7 +45,7 @@ export function Header() {
               Prompt Bank
             </span>
             <span className="text-sm font-extrabold text-[#FF4500] -mt-1 tracking-wide">
-              of 뱅가드AI
+              of 뱅가드AI경매
             </span>
           </Link>
         </div>

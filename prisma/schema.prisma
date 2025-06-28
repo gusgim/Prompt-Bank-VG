@@ -74,7 +74,7 @@ model InviteCode {
 
 // 프롬프트 모델 (사용자별 분리)
 model Prompt {
-  id          Int   @id @default(autoincrement())
+  id          String @id @default(cuid())
   title       String
   content     String
   category    String

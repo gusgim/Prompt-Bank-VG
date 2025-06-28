@@ -20,9 +20,10 @@ export interface ApiResponse<T> {
 export interface PaginatedResponse<T> {
   data: T[];
   pagination: {
-    currentPage: number;
+    page: number;
+    limit: number;
+    total: number;
     totalPages: number;
-    totalCount: number;
     hasNext: boolean;
     hasPrev: boolean;
   };

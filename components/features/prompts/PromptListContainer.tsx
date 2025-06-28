@@ -157,7 +157,7 @@ export function PromptListContainer() {
               <div className="text-sm text-gray-500">
                 {promptsData?.pagination ? (
                   <>
-                    총 <span className="font-semibold text-gray-700">{promptsData.pagination.totalCount}</span>개의 프롬프트
+                    총 <span className="font-semibold text-gray-700">{promptsData.pagination.total}</span>개의 프롬프트
                     {filters.query && (
                       <span className="ml-2">
                         ("<span className="font-medium">{filters.query}</span>" 검색 결과)
@@ -178,7 +178,7 @@ export function PromptListContainer() {
               <div className="text-sm text-gray-400">
                 {promptsData?.pagination && (
                   <>
-                    {promptsData.pagination.currentPage} / {promptsData.pagination.totalPages} 페이지
+                    {promptsData.pagination.page} / {promptsData.pagination.totalPages} 페이지
                   </>
                 )}
               </div>
@@ -208,7 +208,7 @@ export function PromptListContainer() {
                       onClick={() => handleFiltersChange({ ...filters, page: pageNum })}
                       disabled={finalIsLoading}
                       className={`px-3 py-2 text-sm rounded-md border transition-colors shadow-md ${
-                        pageNum === promptsData.pagination.currentPage
+                        pageNum === promptsData.pagination.page
                           ? 'bg-blue-500 text-white border-blue-500 shadow-lg'
                           : 'bg-white/75 backdrop-blur-md text-gray-700 border-gray-400/60 hover:bg-white/85'
                       } disabled:opacity-50 disabled:cursor-not-allowed`}
