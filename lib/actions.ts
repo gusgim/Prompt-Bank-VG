@@ -1861,6 +1861,16 @@ export async function createBannerAction(formData: FormData): Promise<{ success:
     const isActive = formData.get('isActive') === 'true'
     const order = parseInt(formData.get('order') as string) || 0
 
+    console.log('📝 배너 생성 요청 데이터:', {
+      title,
+      description,
+      url,
+      imageUrl,
+      isActive,
+      order,
+      userId: session.user.id
+    })
+
     if (!title || !url) {
       return { success: false, error: '제목과 URL은 필수입니다.' }
     }
@@ -1886,11 +1896,15 @@ export async function createBannerAction(formData: FormData): Promise<{ success:
       }
     })
     
-    console.log(`✅ 배너 생성: ${session.user.id} - ${title}`)
+    console.log(`✅ 배너 생성 성공: ${session.user.id} - ${title} (ID: ${banner.id})`)
     
     return { success: true, data: banner }
   } catch (error) {
-    console.error('배너 생성 에러:', error)
+    console.error('💥 배너 생성 에러:', error)
+    console.error('💥 에러 상세:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
     return { success: false, error: '배너 생성 중 오류가 발생했습니다.' }
   }
 }

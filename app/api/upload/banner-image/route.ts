@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile } from 'fs/promises'
+import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { auth } from '@/lib/auth'
 
@@ -51,21 +51,35 @@ export async function POST(request: NextRequest) {
     const fileExtension = file.name.split('.').pop()
     const fileName = `banner_${timestamp}.${fileExtension}`
     
-    const uploadPath = join(process.cwd(), 'public', 'uploads', 'banners', fileName)
+    // 업로드 디렉토리 경로
+    const uploadDir = join(process.cwd(), 'public', 'uploads', 'banners')
+    const uploadPath = join(uploadDir, fileName)
     
-    // 파일 저장
-    await writeFile(uploadPath, buffer)
-    
-    // 웹에서 접근 가능한 URL 생성
-    const imageUrl = `/uploads/banners/${fileName}`
+    try {
+      // 디렉토리가 없으면 생성
+      await mkdir(uploadDir, { recursive: true })
+      
+      // 파일 저장
+      await writeFile(uploadPath, buffer)
+      
+      console.log(`✅ 배너 이미지 업로드 성공: ${session.user.id} - ${fileName}`)
+      console.log(`📁 저장 경로: ${uploadPath}`)
+      
+      // 웹에서 접근 가능한 URL 생성
+      const imageUrl = `/uploads/banners/${fileName}`
 
-    console.log(`✅ 배너 이미지 업로드 성공: ${session.user.id} - ${fileName}`)
-
-    return NextResponse.json({
-      success: true,
-      imageUrl,
-      fileName
-    })
+      return NextResponse.json({
+        success: true,
+        imageUrl,
+        fileName
+      })
+    } catch (writeError) {
+      console.error('💥 파일 저장 에러:', writeError)
+      return NextResponse.json(
+        { success: false, error: '파일 저장 중 오류가 발생했습니다.' },
+        { status: 500 }
+      )
+    }
 
   } catch (error) {
     console.error('💥 배너 이미지 업로드 에러:', error)
