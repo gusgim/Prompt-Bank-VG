@@ -47,7 +47,7 @@ export const metadata: Metadata = {
         url: 'https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg',
         width: 1200,
         height: 630,
-        alt: 'Prompt Bank of 뱅가드AI경매 - AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
+        alt: 'Prompt Bank of 뱅가드AI경매',
       },
     ],
   },
@@ -56,21 +56,10 @@ export const metadata: Metadata = {
     title: 'Prompt Bank of 뱅가드AI경매',
     description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
     images: ['https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg'],
-    creator: '@vanguard_ai',
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
   },
 };
 
