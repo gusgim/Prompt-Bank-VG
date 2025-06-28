@@ -43,12 +43,12 @@ export function PromptListContainer() {
         setCategories(categoriesResult)
         setTags(tagsResult)
         
-      } catch (error) {
+    } catch (error) {
         console.error('초기 데이터 로딩 중 오류:', error)
         showToast('데이터 로딩 중 오류가 발생했습니다.', 'error')
-      } finally {
+    } finally {
         setIsLoading(false)
-      }
+    }
     }
     
     initializeData()
@@ -66,7 +66,7 @@ export function PromptListContainer() {
           }).catch(error => {
             console.error('필터링된 프롬프트 로딩 실패:', error)
             showToast('프롬프트 로딩 실패', 'error')
-          })
+      })
         })
       } catch (error) {
         console.error('필터 변경 중 오류:', error)
@@ -139,102 +139,102 @@ export function PromptListContainer() {
         <div className="flex flex-col xl:flex-row gap-6">
           {/* 왼쪽 사이드바 */}
           <div className="xl:w-80 flex-shrink-0">
-            <FilterSidebar
-              filters={filters}
-              categories={categories}
-              tags={tagNames}
-              onFiltersChange={handleFiltersChange}
-            />
-          </div>
+          <FilterSidebar
+            filters={filters}
+            categories={categories}
+            tags={tagNames}
+            onFiltersChange={handleFiltersChange}
+          />
+        </div>
 
           {/* 중앙 메인 콘텐츠 */}
           <div className="flex-1 min-w-0">
             {/* 중요 공지사항 배너 */}
             <ImportantNoticesBanner />
             
-            {/* 프롬프트 총 개수 표시 */}
-            <div className="mb-4 flex items-center justify-between">
-              <div className="text-sm text-gray-500">
-                {promptsData?.pagination ? (
-                  <>
+          {/* 프롬프트 총 개수 표시 */}
+          <div className="mb-4 flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              {promptsData?.pagination ? (
+                <>
                     총 <span className="font-semibold text-gray-700">{promptsData.pagination.total}</span>개의 프롬프트
-                    {filters.query && (
-                      <span className="ml-2">
-                        ("<span className="font-medium">{filters.query}</span>" 검색 결과)
-                      </span>
-                    )}
-                    {filters.category && (
-                      <span className="ml-2">
-                        (<span className="font-medium">{filters.category}</span> 카테고리)
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  '프롬프트 개수 확인 중...'
-                )}
+                  {filters.query && (
+                    <span className="ml-2">
+                      ("<span className="font-medium">{filters.query}</span>" 검색 결과)
+                    </span>
+                  )}
+                  {filters.category && (
+                    <span className="ml-2">
+                      (<span className="font-medium">{filters.category}</span> 카테고리)
+                    </span>
+                  )}
+                </>
+              ) : (
+                '프롬프트 개수 확인 중...'
+              )}
+            </div>
+            
+              {/* 정렬 옵션 */}
+            <div className="text-sm text-gray-400">
+              {promptsData?.pagination && (
+                <>
+                    {promptsData.pagination.page} / {promptsData.pagination.totalPages} 페이지
+                </>
+              )}
+            </div>
+          </div>
+
+          <PromptList
+            prompts={prompts}
+              isLoading={finalIsLoading}
+            onDelete={handleDelete}
+          />
+          
+          {/* 페이지네이션 */}
+          {promptsData?.pagination && promptsData.pagination.totalPages > 1 && (
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <button
+                onClick={() => handleFiltersChange({ ...filters, page: filters.page! - 1 })}
+                  disabled={!promptsData.pagination.hasPrev || finalIsLoading}
+                className="px-3 py-2 text-sm bg-white/75 backdrop-blur-md border border-gray-400/60 rounded-md hover:bg-white/85 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+              >
+                이전
+              </button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: promptsData.pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    onClick={() => handleFiltersChange({ ...filters, page: pageNum })}
+                      disabled={finalIsLoading}
+                    className={`px-3 py-2 text-sm rounded-md border transition-colors shadow-md ${
+                        pageNum === promptsData.pagination.page
+                        ? 'bg-blue-500 text-white border-blue-500 shadow-lg'
+                        : 'bg-white/75 backdrop-blur-md text-gray-700 border-gray-400/60 hover:bg-white/85'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
               </div>
               
-              {/* 정렬 옵션 */}
-              <div className="text-sm text-gray-400">
-                {promptsData?.pagination && (
-                  <>
-                    {promptsData.pagination.page} / {promptsData.pagination.totalPages} 페이지
-                  </>
-                )}
-              </div>
-            </div>
-
-            <PromptList
-              prompts={prompts}
-              isLoading={finalIsLoading}
-              onDelete={handleDelete}
-            />
-            
-            {/* 페이지네이션 */}
-            {promptsData?.pagination && promptsData.pagination.totalPages > 1 && (
-              <div className="mt-6 flex items-center justify-center gap-2">
-                <button
-                  onClick={() => handleFiltersChange({ ...filters, page: filters.page! - 1 })}
-                  disabled={!promptsData.pagination.hasPrev || finalIsLoading}
-                  className="px-3 py-2 text-sm bg-white/75 backdrop-blur-md border border-gray-400/60 rounded-md hover:bg-white/85 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                >
-                  이전
-                </button>
-                
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: promptsData.pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
-                    <button
-                      key={pageNum}
-                      onClick={() => handleFiltersChange({ ...filters, page: pageNum })}
-                      disabled={finalIsLoading}
-                      className={`px-3 py-2 text-sm rounded-md border transition-colors shadow-md ${
-                        pageNum === promptsData.pagination.page
-                          ? 'bg-blue-500 text-white border-blue-500 shadow-lg'
-                          : 'bg-white/75 backdrop-blur-md text-gray-700 border-gray-400/60 hover:bg-white/85'
-                      } disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      {pageNum}
-                    </button>
-                  ))}
-                </div>
-                
-                <button
-                  onClick={() => handleFiltersChange({ ...filters, page: filters.page! + 1 })}
+              <button
+                onClick={() => handleFiltersChange({ ...filters, page: filters.page! + 1 })}
                   disabled={!promptsData.pagination.hasNext || finalIsLoading}
-                  className="px-3 py-2 text-sm bg-white/75 backdrop-blur-md border border-gray-400/60 rounded-md hover:bg-white/85 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                >
-                  다음
-                </button>
-              </div>
-            )}
-          </div>
+                className="px-3 py-2 text-sm bg-white/75 backdrop-blur-md border border-gray-400/60 rounded-md hover:bg-white/85 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+              >
+                다음
+              </button>
+            </div>
+          )}
+        </div>
 
           {/* 오른쪽 배너 영역 */}
           <div className="hidden xl:block xl:w-80 flex-shrink-0">
             <BannerSection />
           </div>
-        </div>
       </div>
+    </div>
     </div>
   )
 } 

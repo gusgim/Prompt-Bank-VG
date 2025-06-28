@@ -29,11 +29,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description: prompt.content.substring(0, 200) + (prompt.content.length > 200 ? '...' : ''),
         type: 'article',
         authors: [prompt.author],
+        images: [
+          {
+            url: '/golden-gate-bridge.jpg',
+            width: 1200,
+            height: 630,
+            alt: `${prompt.title} - Prompt Bank of 뱅가드AI경매`,
+          },
+        ],
+        siteName: 'Prompt Bank of 뱅가드AI경매',
       },
       twitter: {
         card: 'summary_large_image',
         title: prompt.title,
         description: prompt.content.substring(0, 200) + (prompt.content.length > 200 ? '...' : ''),
+        images: ['/golden-gate-bridge.jpg'],
       },
       robots: {
         index: true,
@@ -44,6 +54,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: '프롬프트를 찾을 수 없습니다 - Prompt Bank',
       description: '요청하신 프롬프트를 찾을 수 없습니다.',
+      openGraph: {
+        title: '프롬프트를 찾을 수 없습니다 - Prompt Bank',
+        description: '요청하신 프롬프트를 찾을 수 없습니다.',
+        images: [
+          {
+            url: '/golden-gate-bridge.jpg',
+            width: 1200,
+            height: 630,
+            alt: 'Prompt Bank of 뱅가드AI경매',
+          },
+        ],
+      },
     }
   }
 }
