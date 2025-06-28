@@ -8,6 +8,18 @@ import { auth } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// 동적 URL 생성
+const getBaseUrl = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'https://prompt-bank-vg-dun.vercel.app'
+  }
+  return 'http://localhost:3002'
+}
+
+const baseUrl = getBaseUrl()
+
 export const metadata: Metadata = {
   title: "Prompt Bank of 뱅가드AI경매",
   description: "AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템",
@@ -20,7 +32,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://prompt-bank-vg-dun.vercel.app'),
+  metadataBase: new URL(baseUrl),
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -38,13 +50,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
-    url: 'https://prompt-bank-vg-dun.vercel.app',
+    url: baseUrl,
     title: 'Prompt Bank of 뱅가드AI경매',
     description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
     siteName: 'Prompt Bank of 뱅가드AI경매',
     images: [
       {
-        url: 'https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg',
+        url: `${baseUrl}/golden-gate-bridge.jpg`,
         width: 1200,
         height: 630,
         alt: 'Prompt Bank of 뱅가드AI경매',
@@ -55,7 +67,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Prompt Bank of 뱅가드AI경매',
     description: 'AI × 부동산경매 전문가를 위한 프롬프트 아카이빙 시스템',
-    images: ['https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg'],
+    images: [`${baseUrl}/golden-gate-bridge.jpg`],
   },
   robots: {
     index: true,

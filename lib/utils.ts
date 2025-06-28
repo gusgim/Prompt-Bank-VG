@@ -73,31 +73,7 @@ export function isYouTubeUrl(url: string): boolean {
   return /(?:youtube\.com|youtu\.be)/i.test(url)
 }
 
-/**
- * 웹사이트의 Open Graph 이미지를 가져옵니다
- */
-export async function getOpenGraphImage(url: string): Promise<string | null> {
-  try {
-    console.log('🔍 Open Graph 이미지 요청:', url)
-    // 클라이언트 사이드에서는 CORS 문제로 직접 접근 불가
-    // 서버 사이드 API를 통해 처리해야 함
-    const response = await fetch(`/api/og-image?url=${encodeURIComponent(url)}`)
-    const data = await response.json()
-    
-    console.log('📥 Open Graph API 응답:', data)
-    
-    if (data.success && data.imageUrl) {
-      console.log('✅ Open Graph 이미지 성공:', data.imageUrl)
-      return data.imageUrl
-    }
-    
-    console.log('❌ Open Graph 이미지 실패:', data.error || 'No image found')
-    return null
-  } catch (error) {
-    console.error('❌ Open Graph 이미지 가져오기 실패:', error)
-    return null
-  }
-}
+// Open Graph 기능 제거 - YouTube만 자동 썸네일 지원
 
 /**
  * URL에서 자동으로 썸네일을 가져옵니다

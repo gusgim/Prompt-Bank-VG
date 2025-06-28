@@ -23,6 +23,17 @@ export function PromptListContainer() {
   
   const [isPending, startTransition] = useTransition()
 
+  // PC 모드 설정 확인
+  useEffect(() => {
+    const viewMode = localStorage.getItem('viewMode')
+    if (viewMode === 'desktop') {
+      const viewport = document.querySelector('meta[name=viewport]') as HTMLMetaElement
+      if (viewport) {
+        viewport.setAttribute('content', 'width=1200, initial-scale=0.8, user-scalable=yes')
+      }
+    }
+  }, [])
+
   // 초기 데이터 로딩
   useEffect(() => {
     const initializeData = async () => {
@@ -108,17 +119,28 @@ export function PromptListContainer() {
   // 초기화 전에는 로딩 스피너 표시
   if (!isInitialized || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-200 via-blue-200/80 to-indigo-300/90 relative">
-        {/* 배경 패턴 */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgb(0,0,0) 1px, transparent 0)`,
-          backgroundSize: '20px 20px'
+      <div className="min-h-screen bg-gradient-to-br from-violet-100 via-pink-50 to-amber-50 relative overflow-hidden">
+        {/* 동적 배경 패턴 */}
+        <div className="absolute inset-0 opacity-[0.15]" style={{
+          backgroundImage: `
+            radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.1) 2px, transparent 2px),
+            linear-gradient(135deg, rgba(168, 85, 247, 0.05) 25%, transparent 25%),
+            linear-gradient(-45deg, rgba(236, 72, 153, 0.05) 25%, transparent 25%)
+          `,
+          backgroundSize: '40px 40px, 60px 60px, 80px 80px'
         }}></div>
+        
+        {/* 플로팅 도형들 */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-violet-200/30 to-purple-300/30 rounded-full blur-xl"></div>
+          <div className="absolute top-60 right-32 w-24 h-24 bg-gradient-to-br from-pink-200/30 to-rose-300/30 rounded-full blur-lg"></div>
+          <div className="absolute bottom-40 left-40 w-20 h-20 bg-gradient-to-br from-amber-200/30 to-orange-300/30 rounded-full blur-lg"></div>
+        </div>
         
         <div className="w-full px-6 py-6 relative z-10">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
-              <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <div className="animate-spin w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full mx-auto mb-4"></div>
               <p className="text-gray-600">데이터를 불러오는 중...</p>
             </div>
           </div>
@@ -128,12 +150,24 @@ export function PromptListContainer() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-200 via-blue-200/80 to-indigo-300/90 relative">
-      {/* 배경 패턴 */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgb(0,0,0) 1px, transparent 0)`,
-        backgroundSize: '20px 20px'
+    <div className="min-h-screen bg-gradient-to-br from-violet-100 via-pink-50 to-amber-50 relative overflow-hidden">
+      {/* 동적 배경 패턴 */}
+      <div className="absolute inset-0 opacity-[0.15]" style={{
+        backgroundImage: `
+          radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.1) 2px, transparent 2px),
+          linear-gradient(135deg, rgba(168, 85, 247, 0.05) 25%, transparent 25%),
+          linear-gradient(-45deg, rgba(236, 72, 153, 0.05) 25%, transparent 25%)
+        `,
+        backgroundSize: '40px 40px, 60px 60px, 80px 80px'
       }}></div>
+      
+      {/* 플로팅 도형들 */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-violet-200/30 to-purple-300/30 rounded-full blur-xl"></div>
+        <div className="absolute top-60 right-32 w-24 h-24 bg-gradient-to-br from-pink-200/30 to-rose-300/30 rounded-full blur-lg"></div>
+        <div className="absolute bottom-40 left-40 w-20 h-20 bg-gradient-to-br from-amber-200/30 to-orange-300/30 rounded-full blur-lg"></div>
+        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 rounded-full blur-md"></div>
+      </div>
       
       <div className="w-full px-6 py-6 relative z-10">
         <div className="flex flex-col xl:flex-row gap-6">
@@ -229,10 +263,37 @@ export function PromptListContainer() {
           )}
         </div>
 
-          {/* 오른쪽 배너 영역 */}
-          <div className="hidden xl:block xl:w-80 flex-shrink-0">
-            <BannerSection />
+          {/* 배너 영역 - 모바일에서는 전체 너비, 데스크톱에서는 80% 축소 */}
+          <div className="w-full xl:w-64 flex-shrink-0">
+            <div className="bg-gradient-to-br from-slate-800/80 via-slate-700/70 to-slate-900/80 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/10">
+              <BannerSection />
+            </div>
           </div>
+      </div>
+      
+      {/* 모바일 PC버전 전환 버튼 */}
+      <div className="xl:hidden mt-8 pb-6 px-6">
+        <button
+          onClick={() => {
+            // 뷰포트 메타 태그를 데스크톱 모드로 변경
+            const viewport = document.querySelector('meta[name=viewport]') as HTMLMetaElement
+            if (viewport) {
+              viewport.setAttribute('content', 'width=1200, initial-scale=0.8, user-scalable=yes')
+            }
+            // 로컬 스토리지에 PC 모드 설정 저장
+            localStorage.setItem('viewMode', 'desktop')
+            window.location.reload()
+          }}
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          PC 버전으로 보기
+        </button>
+        <p className="text-center text-xs text-white/60 mt-2">
+          더 넓은 화면에서 프롬프트를 관리하세요
+        </p>
       </div>
     </div>
     </div>
