@@ -31,7 +31,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         authors: [prompt.author],
         images: [
           {
-            url: '/golden-gate-bridge.jpg',
+            url: process.env.VERCEL_URL 
+              ? `https://${process.env.VERCEL_URL}/golden-gate-bridge.jpg`
+              : `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/golden-gate-bridge.jpg`,
             width: 1200,
             height: 630,
             alt: `${prompt.title} - Prompt Bank of 뱅가드AI경매`,
@@ -43,7 +45,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         card: 'summary_large_image',
         title: prompt.title,
         description: prompt.content.substring(0, 200) + (prompt.content.length > 200 ? '...' : ''),
-        images: ['/golden-gate-bridge.jpg'],
+        images: [
+          process.env.VERCEL_URL 
+            ? `https://${process.env.VERCEL_URL}/golden-gate-bridge.jpg`
+            : `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/golden-gate-bridge.jpg`
+        ],
       },
       robots: {
         index: true,
@@ -59,7 +65,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description: '요청하신 프롬프트를 찾을 수 없습니다.',
         images: [
           {
-            url: '/golden-gate-bridge.jpg',
+            url: process.env.VERCEL_URL 
+              ? `https://${process.env.VERCEL_URL}/golden-gate-bridge.jpg`
+              : `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/golden-gate-bridge.jpg`,
             width: 1200,
             height: 630,
             alt: 'Prompt Bank of 뱅가드AI경매',
