@@ -2369,7 +2369,7 @@ export async function createNotificationAction(
         type,
         title,
         message,
-        data: data ? JSON.stringify(data) : null,
+        data: data ? JSON.stringify(data) : undefined,
         targetAdminIds: targetAdminIds || []
       }
     })
