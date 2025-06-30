@@ -18,7 +18,7 @@ async function updateSuperAdminPassword() {
     }
     
     // 새 비밀번호 해싱
-    const hashedPassword = await bcrypt.hash('Passw0rdVG@!', 12)
+    const hashedPassword = await bcrypt.hash('Passw0rdAI@!', 12)
     
     // 비밀번호 업데이트
     await prisma.user.update({
@@ -28,7 +28,7 @@ async function updateSuperAdminPassword() {
     
     console.log('🎉 슈퍼 관리자 비밀번호가 업데이트되었습니다!')
     console.log('📧 이메일:', superAdmin.email)
-    console.log('🔑 새 비밀번호: Passw0rdVG@!')
+    console.log('🔑 새 비밀번호: Passw0rdAI@!')
     console.log('⚠️  보안을 위해 첫 로그인 후 비밀번호를 변경하세요.')
     
   } catch (error) {

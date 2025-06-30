@@ -2,7 +2,7 @@
 
 ## 🎯 프로젝트 개요
 
-**프로젝트명**: Prompt Bank of 뱅가드AI경매  
+**프로젝트명**: Prompt Bank of AI SQUARE  
 **목적**: 개인용 프롬프트 저장, 관리, 검색 시스템  
 **기술 스택**: Next.js 14, TypeScript, Prisma, PostgreSQL, NextAuth.js v5  
 **아키텍처**: 서버 액션 기반 풀스택 애플리케이션  

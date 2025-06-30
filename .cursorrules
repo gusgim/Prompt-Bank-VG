@@ -3,7 +3,7 @@
 이 프로젝트는 **프롬프트 뱅크 시스템**입니다.
 
 ## 🎯 핵심 정보
-- **프로젝트**: Prompt Bank of 뱅가드AI경매
+- **프로젝트**: Prompt Bank of AI SQUARE
 - **기술스택**: Next.js 14, TypeScript, Prisma, PostgreSQL, NextAuth.js v5
 - **아키텍처**: 서버 액션 기반 풀스택 애플리케이션
 - **인증**: NextAuth.js v5 (역할 기반: USER, ADMIN)

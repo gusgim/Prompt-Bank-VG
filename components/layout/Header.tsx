@@ -97,6 +97,19 @@ export function Header() {
                 <span>New Prompt</span>
               </Link>
 
+              {/* 마이페이지 버튼 */}
+              <Link
+                href="/profile"
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors font-medium ${
+                  pathname === '/profile'
+                    ? 'bg-[#FF4500] text-white'
+                    : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <User className="h-4 w-4" />
+                <span>마이페이지</span>
+              </Link>
+
               {/* 관리자 버튼 (관리자만 표시) */}
               {session.user.role === 'ADMIN' && (
                 <Link

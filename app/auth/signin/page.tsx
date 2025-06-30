@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
-    url: 'https://prompt-bank-vg-dun.vercel.app/auth/signin',
+    url: 'https://prompt-bank-ai-square.vercel.app/auth/signin',
     title: '로그인 - Prompt Bank of AI SQUARE',
     description: 'AI 프롬프트 관리 시스템에 로그인하세요',
     siteName: 'Prompt Bank of AI SQUARE',

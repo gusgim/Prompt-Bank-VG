@@ -157,17 +157,17 @@ export function PromptListContainer() {
             <div className="text-sm text-gray-500">
               {promptsData?.pagination ? (
                 <>
-                      총 <span className="font-semibold text-gray-700">{promptsData.pagination.total}</span>개의 프롬프트
-                    {filters.query && (
-                      <span className="ml-2">
-                        ("<span className="font-medium">{filters.query}</span>" 검색 결과)
-                      </span>
-                    )}
-                    {filters.category && (
-                      <span className="ml-2">
-                        (<span className="font-medium">{filters.category}</span> 카테고리)
-                      </span>
-                    )}
+                    총 <span className="font-semibold text-gray-700">{promptsData.pagination.total}</span>개의 프롬프트
+                  {filters.query && (
+                    <span className="ml-2">
+                      ("<span className="font-medium">{filters.query}</span>" 검색 결과)
+                    </span>
+                  )}
+                  {filters.category && (
+                    <span className="ml-2">
+                      (<span className="font-medium">{filters.category}</span> 카테고리)
+                    </span>
+                  )}
                 </>
               ) : (
                 '프롬프트 개수 확인 중...'
@@ -234,8 +234,8 @@ export function PromptListContainer() {
             <div className="bg-gradient-to-br from-slate-800/80 via-slate-700/70 to-slate-900/80 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/10">
               <BannerSection />
             </div>
+            </div>
           </div>
-        </div>
       </div>
       
       {/* 모바일 PC버전 전환 버튼 */}

@@ -1,4 +1,4 @@
-# Prompt Bank of VG
+# Prompt Bank of AI SQUARE
 
 개인 프롬프트 관리 시스템으로, 효율적인 프롬프트 저장, 검색, 관리 기능을 제공합니다.
 
@@ -164,4 +164,4 @@ npm start
 
 ---
 
-© 2025 VanGuard. All rights reserved. 
+© 2025 AI SQUARE. All rights reserved. 

@@ -100,12 +100,9 @@ export async function createPrompt(data: PromptFormData) {
 }
 
 export async function updatePrompt(id: string, data: PromptFormData) {
-  console.log('🔄 프롬프트 수정 서버 액션 시작')
-  
   const session = await auth()
   
   if (!session?.user?.id) {
-    console.log('❌ 인증되지 않은 사용자')
     throw new Error('로그인이 필요합니다.')
   }
 
@@ -121,13 +118,6 @@ export async function updatePrompt(id: string, data: PromptFormData) {
     if (!existingPrompt) {
       throw new Error('프롬프트를 찾을 수 없습니다.')
     }
-
-    console.log('📝 프롬프트 수정 데이터:', {
-      id,
-      title: data.title,
-      category: data.category,
-      userId: session.user.id
-    })
 
     // 기존 태그 연결 해제
     await prisma.prompt.update({
@@ -167,22 +157,18 @@ export async function updatePrompt(id: string, data: PromptFormData) {
       }
     })
 
-    console.log('✅ 프롬프트 수정 성공:', prompt.id)
-    
     revalidatePath('/')
     revalidatePath('/prompts')
     revalidatePath(`/prompts/${id}`)
     
     return { success: true, prompt }
   } catch (error) {
-    console.error('💥 프롬프트 수정 에러:', error)
+    console.error('프롬프트 수정 에러:', error)
     throw new Error('프롬프트 수정 중 오류가 발생했습니다.')
   }
 }
 
 export async function getPromptsAction(filters: PromptFilters = {}) {
-  console.log('🔍 서버 액션: 프롬프트 조회', filters)
-
   try {
     const session = await auth()
     if (!session?.user) {
@@ -237,11 +223,6 @@ export async function getPromptsAction(filters: PromptFilters = {}) {
 
     const totalPages = Math.ceil(totalCount / limit)
 
-    console.log('✅ 서버 액션: 프롬프트 조회 성공', {
-      '조회된_개수': prompts.length,
-      '전체_개수': totalCount
-    })
-
     return {
       success: true,
       data: prompts,
@@ -255,14 +236,12 @@ export async function getPromptsAction(filters: PromptFilters = {}) {
       }
     }
   } catch (error) {
-    console.error('💥 서버 액션: 프롬프트 조회 오류:', error)
+    console.error('프롬프트 조회 오류:', error)
     throw new Error('프롬프트 조회에 실패했습니다.')
   }
 }
 
 export async function getCategoriesAction() {
-  console.log('🔍 서버 액션: 카테고리 조회')
-
   try {
     const session = await auth()
     if (!session?.user) {
@@ -289,17 +268,14 @@ export async function getCategoriesAction() {
     const userCategoryNames = userCategories.map(c => c.category)
     const allCategories = Array.from(new Set([...defaultCategories, ...userCategoryNames]))
     
-    console.log('✅ 서버 액션: 카테고리 조회 성공', allCategories)
     return allCategories
   } catch (error) {
-    console.error('💥 서버 액션: 카테고리 조회 오류:', error)
+    console.error('카테고리 조회 오류:', error)
     throw new Error('카테고리 조회에 실패했습니다.')
   }
 }
 
 export async function getTagsAction() {
-  console.log('🏷️ 서버 액션: 태그 조회')
-
   try {
     const session = await auth()
     if (!session?.user) {
@@ -318,18 +294,15 @@ export async function getTagsAction() {
       },
     })
     
-    console.log('✅ 서버 액션: 태그 조회 성공', tags.length, '개')
     return tags
   } catch (error) {
-    console.error('💥 서버 액션: 태그 조회 오류:', error)
+    console.error('태그 조회 오류:', error)
     throw new Error('태그 조회에 실패했습니다.')
   }
 }
 
 export async function getPromptByIdAction(id: string) {
   try {
-    console.log('🔍 서버 액션: 프롬프트 상세 조회', id)
-    
     const session = await auth()
     if (!session?.user) {
       throw new Error('인증이 필요합니다.')
@@ -349,15 +322,9 @@ export async function getPromptByIdAction(id: string) {
       throw new Error('프롬프트를 찾을 수 없습니다.')
     }
 
-    console.log('✅ 서버 액션: 프롬프트 상세 조회 성공', {
-      id: prompt.id,
-      title: prompt.title,
-      category: prompt.category
-    })
-
     return prompt
   } catch (error) {
-    console.error('💥 서버 액션: 프롬프트 상세 조회 오류:', error)
+    console.error('프롬프트 상세 조회 오류:', error)
     throw error
   }
 }
@@ -2460,5 +2427,102 @@ export async function markNotificationAsReadAction(notificationId: string): Prom
       success: false, 
       error: error instanceof Error ? error.message : '알림 읽음 처리에 실패했습니다.' 
     }
+  }
+}
+
+// =====================================================
+// 마이페이지/프로필 관련 액션들
+// =====================================================
+
+// 사용자 정보 조회 (본인만)
+export async function getUserProfileAction(): Promise<{ success: boolean; data?: any; error?: string }> {
+  try {
+    const session = await auth()
+    
+    if (!session?.user?.id) {
+      return { success: false, error: '로그인이 필요합니다.' }
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        expiresAt: true,
+        _count: {
+          select: {
+            prompts: true,
+            tags: true
+          }
+        }
+      }
+    })
+
+    if (!user) {
+      return { success: false, error: '사용자를 찾을 수 없습니다.' }
+    }
+
+    return { success: true, data: user }
+  } catch (error) {
+    console.error('사용자 프로필 조회 오류:', error)
+    return { success: false, error: '사용자 정보를 불러오는 중 오류가 발생했습니다.' }
+  }
+}
+
+// 비밀번호 변경
+export async function changePasswordAction(
+  currentPassword: string,
+  newPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const session = await auth()
+    
+    if (!session?.user?.id) {
+      return { success: false, error: '로그인이 필요합니다.' }
+    }
+
+    // 현재 사용자 정보 조회
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        password: true
+      }
+    })
+
+    if (!user || !user.password) {
+      return { success: false, error: '사용자를 찾을 수 없거나 비밀번호가 설정되지 않았습니다.' }
+    }
+
+    // 현재 비밀번호 확인
+    const bcryptjs = require('bcryptjs')
+    const isCurrentPasswordValid = await bcryptjs.compare(currentPassword, user.password)
+    
+    if (!isCurrentPasswordValid) {
+      return { success: false, error: '현재 비밀번호가 올바르지 않습니다.' }
+    }
+
+    // 새 비밀번호 유효성 검사
+    if (newPassword.length < 6) {
+      return { success: false, error: '새 비밀번호는 6자 이상이어야 합니다.' }
+    }
+
+    // 새 비밀번호 해싱
+    const hashedNewPassword = await bcryptjs.hash(newPassword, 12)
+
+    // 비밀번호 업데이트
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { password: hashedNewPassword }
+    })
+
+    return { success: true }
+  } catch (error) {
+    console.error('비밀번호 변경 오류:', error)
+    return { success: false, error: '비밀번호 변경 중 오류가 발생했습니다.' }
   }
 } 

@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         card: 'summary_large_image',
         title: prompt.title,
         description: prompt.content.substring(0, 200) + (prompt.content.length > 200 ? '...' : ''),
-        images: ['https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg'],
+        images: ['https://prompt-bank-ai-square.vercel.app/golden-gate-bridge.jpg'],
       },
       robots: {
         index: true,
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description: '요청하신 프롬프트를 찾을 수 없습니다.',
         images: [
           {
-            url: 'https://prompt-bank-vg-dun.vercel.app/golden-gate-bridge.jpg',
+            url: 'https://prompt-bank-ai-square.vercel.app/golden-gate-bridge.jpg',
             width: 1200,
             height: 630,
             alt: 'Prompt Bank of AI SQUARE',

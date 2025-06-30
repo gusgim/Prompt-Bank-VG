@@ -40,7 +40,7 @@ export function Footer({ isDark = false }: FooterProps) {
             </Link>
             <span className={`hidden sm:block ${isDark ? 'text-gray-400' : 'text-gray-300'}`}>|</span>
             <Link 
-              href="mailto:contact@vanguard-ai-auction.com" 
+              href="mailto:contact@aisquare.ai" 
               className="flex items-center gap-2 text-[#FF4500] hover:text-[#FF4500]/80 font-medium transition-colors"
             >
               <Users className="h-4 w-4" />

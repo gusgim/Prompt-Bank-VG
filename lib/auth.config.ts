@@ -14,7 +14,8 @@ export const authConfig = {
       const isOnDashboard = nextUrl.pathname.startsWith('/prompts') || 
                            nextUrl.pathname.startsWith('/admin') ||
                            nextUrl.pathname.startsWith('/dashboard') ||
-                           nextUrl.pathname.startsWith('/analytics');
+                           nextUrl.pathname.startsWith('/analytics') ||
+                           nextUrl.pathname.startsWith('/profile');
 
       if (isOnDashboard) {
         if (isLoggedIn) return true;

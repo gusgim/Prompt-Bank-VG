@@ -93,9 +93,8 @@ export const {
             : 60 * 60 * 1000) // 프로덕션: 1시간
       }
       
-      // 절대 만료 시간 체크 (이것이 핵심!)
+      // 절대 만료 시간 체크
       if (token.absoluteExpiry && typeof token.absoluteExpiry === 'number' && Date.now() > token.absoluteExpiry) {
-        console.log('🚨 토큰 절대 만료! 강제 로그아웃')
         // 토큰을 null로 반환하면 세션이 무효화됨
         return null
       }
@@ -106,19 +105,7 @@ export const {
       const shouldRefresh = tokenExpires - now < 30 * 60 // 30분
       
       if (shouldRefresh && account?.provider === 'google') {
-        console.log('🔄 JWT 토큰 갱신 중...')
         // Google OAuth는 자동으로 갱신됨
-      }
-      
-      // 개발 환경에서 토큰 상태 로깅
-      if (process.env.NODE_ENV === 'development') {
-        console.log('JWT Debug:', {
-          expires: new Date(tokenExpires * 1000).toLocaleString(),
-          absoluteExpiry: token.absoluteExpiry ? new Date(token.absoluteExpiry).toLocaleString() : 'None',
-          timeLeft: Math.floor((tokenExpires - now) / 60) + '분',
-          absoluteTimeLeft: token.absoluteExpiry ? Math.floor((token.absoluteExpiry - Date.now()) / 60000) + '분' : 'None',
-          shouldRefresh
-        })
       }
       
       return token

@@ -298,13 +298,13 @@ export function EnhancedSignUpForm() {
               </div>
 
               <div className="mt-6">
-                <Button
-                  type="submit"
+              <Button
+                type="submit"
                   className="w-full bg-[#000080] hover:bg-[#000080]/90 text-white"
-                  disabled={isLoading}
-                >
+                disabled={isLoading}
+              >
                   {isLoading ? '가입 진행 중...' : '회원가입 완료'}
-                </Button>
+              </Button>
               </div>
             </form>
           )}
@@ -321,7 +321,7 @@ export function EnhancedSignUpForm() {
           </div>
         </CardContent>
       </Card>
-      
+
       {/* 동의서 모달 */}
       {consentVersion && (
         <ConsentModal

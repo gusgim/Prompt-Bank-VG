@@ -18,7 +18,7 @@ async function createSuperAdmin() {
     }
     
     // 슈퍼 관리자 계정 생성
-    const hashedPassword = await bcrypt.hash('Passw0rdVG@!', 12)
+    const hashedPassword = await bcrypt.hash('Passw0rdAI@!', 12)
     
     const superAdmin = await prisma.user.create({
       data: {
@@ -33,7 +33,7 @@ async function createSuperAdmin() {
     
     console.log('🎉 슈퍼 관리자 계정이 생성되었습니다!')
     console.log('📧 이메일:', superAdmin.email)
-    console.log('🔑 비밀번호: Passw0rdVG@!')
+    console.log('🔑 비밀번호: Passw0rdAI@!')
     console.log('⚠️  보안을 위해 첫 로그인 후 비밀번호를 변경하세요.')
     
   } catch (error) {

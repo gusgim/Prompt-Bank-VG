@@ -31,7 +31,7 @@ async function updateSuperAdminEmail() {
     
     console.log('🎉 슈퍼 관리자 이메일이 업데이트되었습니다!')
     console.log('📧 새 이메일:', updatedSuperAdmin.email)
-    console.log('🔑 비밀번호: Passw0rdVG@!')
+    console.log('🔑 비밀번호: Passw0rdAI@!')
     console.log('✅ 로그인 정보가 업데이트되었습니다.')
     
   } catch (error) {

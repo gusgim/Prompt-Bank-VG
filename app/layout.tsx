@@ -13,7 +13,7 @@ const getBaseUrl = () => {
   if (process.env.NODE_ENV === 'production') {
     return process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
-      : 'https://prompt-bank-vg-dun.vercel.app'
+      : 'https://prompt-bank-ai-square.vercel.app'
   }
   return 'http://localhost:3002'
 }
