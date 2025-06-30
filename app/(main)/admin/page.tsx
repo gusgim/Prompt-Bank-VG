@@ -237,6 +237,29 @@ export default function AdminPage() {
     return diff <= 7
   }
 
+  // 테스트 알림 생성
+  const handleCreateTestNotification = async () => {
+    try {
+      const response = await fetch('/api/admin/test-notification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        showToast('테스트 알림이 생성되었습니다!', 'success')
+      } else {
+        showToast(data.error || '테스트 알림 생성에 실패했습니다.', 'error')
+      }
+    } catch (error) {
+      console.error('테스트 알림 생성 중 오류:', error)
+      showToast('테스트 알림 생성 중 오류가 발생했습니다.', 'error')
+    }
+  }
+
   if (status === 'loading') {
     return <div className="flex justify-center items-center h-screen">로딩 중...</div>
   }
@@ -266,6 +289,18 @@ export default function AdminPage() {
         <Button variant={activeTab === 'users' ? 'default' : 'ghost'} onClick={() => setActiveTab('users')}>사용자 관리</Button>
         <Button variant={activeTab === 'banners' ? 'default' : 'ghost'} onClick={() => setActiveTab('banners')}>배너 관리</Button>
         <Button variant={activeTab === 'notices' ? 'default' : 'ghost'} onClick={() => setActiveTab('notices')}>공지사항 관리</Button>
+      </div>
+
+      {/* 테스트 도구 */}
+      <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <h3 className="text-sm font-medium text-yellow-800 mb-2">개발 테스트 도구</h3>
+        <Button
+          onClick={handleCreateTestNotification}
+          className="bg-blue-500 hover:bg-blue-600 text-white text-sm"
+          size="sm"
+        >
+          🔔 테스트 알림 생성
+        </Button>
       </div>
 
       {/* 초대 코드 관리 탭 */}

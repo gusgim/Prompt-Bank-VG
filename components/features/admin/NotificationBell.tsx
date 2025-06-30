@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { Bell } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useToast } from '@/components/ui/Toast'
@@ -21,11 +22,17 @@ interface Notification {
 }
 
 export function NotificationBell() {
+  const { data: session } = useSession()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { showToast } = useToast()
+
+  // 관리자가 아니면 렌더링하지 않음
+  if (!session?.user?.role || session.user.role !== 'ADMIN') {
+    return null
+  }
 
   // 알림 데이터 로딩
   const loadNotifications = async () => {

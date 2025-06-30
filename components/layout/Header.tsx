@@ -56,10 +56,8 @@ export function Header() {
             <div className="h-10 w-32 bg-gray-200 animate-pulse rounded-lg" />
           ) : session ? (
             <>
-              {/* 관리자만 알림 벨 표시 */}
-              {session?.user?.role === 'ADMIN' && (
-                <NotificationBell />
-              )}
+              {/* 관리자 알림 벨 - 내부에서 권한 확인 */}
+              <NotificationBell />
 
               {/* 대시보드 버튼 */}
               <Link
