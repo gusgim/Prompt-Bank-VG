@@ -28,10 +28,7 @@ export default function EditPromptPage() {
           getCategoriesAction()
         ])
 
-        setPrompt({
-          ...promptData,
-          tags: [], // 👈 기본값 추가
-        })
+        setPrompt(promptData)
         setCategories(categoriesData)
         
         console.log('✅ 프롬프트 수정 페이지 데이터 로딩 성공', {

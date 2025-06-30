@@ -45,7 +45,7 @@ export function Header() {
               Prompt Bank
             </span>
             <span className="text-sm font-extrabold text-[#FF4500] -mt-1 tracking-wide">
-              of 덕스AI
+              By AI SQUARE
             </span>
           </Link>
         </div>

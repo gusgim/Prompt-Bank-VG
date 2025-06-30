@@ -19,10 +19,10 @@ export function Footer({ isDark = false }: FooterProps) {
           <div className="space-y-2">
             <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center justify-center gap-2`}>
               <Award className="h-5 w-5 text-[#FF4500]" />
-              DUX.AI
+              AIXAI
             </h3>
-            <p className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-600'} max-w-2xl mx-auto leading-relaxed`}>
-              Drive. Understand. eXchange. Amplify Intelligence
+            <p className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-600'} max-w-2xl mx-auto leading-relaxed italic`}>
+              Everyone Can Build. Everyday Creators Rise
             </p>
           </div>
 
@@ -35,7 +35,7 @@ export function Footer({ isDark = false }: FooterProps) {
               className="flex items-center gap-2 text-[#FF4500] hover:text-[#FF4500]/80 font-medium transition-colors"
             >
               <BookOpen className="h-4 w-4" />
-              덕스AI 블로그
+              AI SQUARE 블로그
               <ExternalLink className="h-3 w-3" />
             </Link>
             <span className={`hidden sm:block ${isDark ? 'text-gray-400' : 'text-gray-300'}`}>|</span>
@@ -54,14 +54,10 @@ export function Footer({ isDark = false }: FooterProps) {
             {/* 저작권 정보 */}
             <div className={`space-y-2 text-xs ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
               <p className="font-medium">
-                © {currentYear} <span className="text-[#FF4500] font-bold">덕스AI</span> Prompt Bank System
-              </p>
-              <p>
-                Developed with ❤️ for AI-powered Real Estate Auction Education
+                © {currentYear} <span className="text-[#FF4500] font-bold">AI SQUARE</span> Prompt Bank System. All Rights Reserved
               </p>
               <p className={isDark ? 'text-gray-400' : 'text-gray-400'}>
-                이 시스템의 모든 콘텐츠와 프롬프트는 교육 목적으로 제작되었습니다. 
-                무단 복제 및 상업적 이용을 금지합니다.
+                이 시스템의 모든 콘텐츠와 프롬프트에 대해 관리자 또는 승인된 사용자 외에 제3자의 무단 복제 및 상업적 이용을 금지합니다
               </p>
             </div>
           </div>

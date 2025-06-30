@@ -86,10 +86,15 @@ export function PromptCard({ prompt, onDelete }: PromptCardProps) {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <div className="flex items-center">
-            <Badge variant="secondary" className="text-xs">
+          <div className="flex items-center flex-wrap gap-2">
+            <Badge variant="default" className="text-xs bg-[#000080] text-white hover:bg-[#000080]/90">
               {prompt.category}
             </Badge>
+            {prompt.subCategory && (
+              <Badge variant="outline" className="text-xs bg-white text-gray-700">
+                {prompt.subCategory}
+              </Badge>
+            )}
           </div>
           
           <TooltipProvider delayDuration={300}>
@@ -102,7 +107,7 @@ export function PromptCard({ prompt, onDelete }: PromptCardProps) {
               <TooltipContent
                 side="top"
                 align="center"
-                className="max-w-[400px] whitespace-pre-wrap bg-gray-800 text-white p-3 rounded-md shadow-lg"
+                className="max-w-[400px] whitespace-pre-wrap bg-gray-800 text-white p-3 rounded-md shadow-lg z-50"
               >
                 {prompt.content}
               </TooltipContent>

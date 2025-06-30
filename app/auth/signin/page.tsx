@@ -2,27 +2,27 @@ import { SignInForm } from '@/components/auth/SignInForm'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "로그인 - Prompt Bank of 덕스AI",
+  title: "로그인 - Prompt Bank of AI SQUARE",
   description: "AI 프롬프트 관리 시스템에 로그인하세요",
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     url: 'https://prompt-bank-vg-dun.vercel.app/auth/signin',
-    title: '로그인 - Prompt Bank of 덕스AI',
+    title: '로그인 - Prompt Bank of AI SQUARE',
     description: 'AI 프롬프트 관리 시스템에 로그인하세요',
-    siteName: 'Prompt Bank of 덕스AI',
+    siteName: 'Prompt Bank of AI SQUARE',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Prompt Bank of 덕스AI',
+        alt: 'Prompt Bank of AI SQUARE',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: '로그인 - Prompt Bank of 덕스AI',
+    title: '로그인 - Prompt Bank of AI SQUARE',
     description: 'AI 프롬프트 관리 시스템에 로그인하세요',
     images: ['/og-image.png'],
   },
@@ -64,10 +64,7 @@ export default function SignInPage() {
         <div className="text-center">
           <div className="bg-black/30 backdrop-blur-sm border border-white/30 rounded-lg p-3 shadow-2xl">
             <p className="text-xs text-white font-medium mb-1 drop-shadow-md">
-              © 2025 <span className="text-[#FF4500] font-bold">덕스AI</span> Prompt Bank System
-            </p>
-            <p className="text-xs text-white/90 drop-shadow-md">
-              Developed with ❤️ for AI-powered Real Estate Auction Education
+              © 2025 <span className="text-[#FF4500] font-bold">AI SQUARE</span> Prompt Bank System
             </p>
           </div>
         </div>
