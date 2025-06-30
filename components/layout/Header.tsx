@@ -6,6 +6,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { Plus, User, LogOut, Settings, BarChart3, TrendingUp } from 'lucide-react'
 import { useToast } from '@/components/ui/Toast'
 import { NoticeDropdown } from '@/components/features/notices/NoticeDropdown'
+import { NotificationBell } from '@/components/features/admin/NotificationBell'
 
 export function Header() {
   const pathname = usePathname()
@@ -55,6 +56,11 @@ export function Header() {
             <div className="h-10 w-32 bg-gray-200 animate-pulse rounded-lg" />
           ) : session ? (
             <>
+              {/* 관리자만 알림 벨 표시 */}
+              {session?.user?.role === 'ADMIN' && (
+                <NotificationBell />
+              )}
+
               {/* 대시보드 버튼 */}
               <Link
                 href="/dashboard"

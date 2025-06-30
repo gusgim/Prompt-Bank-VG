@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { recordUserConsent } from '@/lib/legal-protection'
+import { createNotificationAction } from '@/lib/actions'
 
 // 회원가입 데이터 검증
 function validateSignupData(data: any) {
@@ -142,6 +143,25 @@ export async function POST(req: NextRequest) {
 
       return user
     })
+
+    // 관리자에게 신규 사용자 알림 생성 (비동기 처리)
+    try {
+      await createNotificationAction(
+        'new_user',
+        '신규 회원 가입',
+        `새로운 회원이 가입했습니다.`,
+        {
+          userId: result.id,
+          userName: result.name,
+          userEmail: result.email,
+          signupDate: result.createdAt,
+          ipAddress: ip
+        }
+      )
+    } catch (notificationError) {
+      console.error('알림 생성 실패 (회원가입은 성공):', notificationError)
+      // 알림 실패는 회원가입을 막지 않음
+    }
 
     return NextResponse.json({
       message: '회원가입이 완료되었습니다.',

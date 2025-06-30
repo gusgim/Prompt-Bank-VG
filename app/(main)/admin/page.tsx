@@ -230,6 +230,13 @@ export default function AdminPage() {
     })
   }
 
+  const isRecentUser = (createdAt: string) => {
+    const created = new Date(createdAt)
+    const now = new Date()
+    const diff = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24)
+    return diff <= 7
+  }
+
   if (status === 'loading') {
     return <div className="flex justify-center items-center h-screen">로딩 중...</div>
   }
@@ -254,31 +261,11 @@ export default function AdminPage() {
       </div>
 
       {/* 탭 네비게이션 */}
-      <div className="flex space-x-1 mb-8">
-        <Button
-          variant={activeTab === 'invites' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('invites')}
-        >
-          초대 코드 관리
-        </Button>
-        <Button
-          variant={activeTab === 'users' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('users')}
-        >
-          사용자 관리
-        </Button>
-        <Button
-          variant={activeTab === 'banners' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('banners')}
-        >
-          배너 관리
-        </Button>
-        <Button
-          variant={activeTab === 'notices' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('notices')}
-        >
-          공지사항 관리
-        </Button>
+      <div className="flex space-x-4 mb-6">
+        <Button variant={activeTab === 'invites' ? 'default' : 'ghost'} onClick={() => setActiveTab('invites')}>초대 코드 관리</Button>
+        <Button variant={activeTab === 'users' ? 'default' : 'ghost'} onClick={() => setActiveTab('users')}>사용자 관리</Button>
+        <Button variant={activeTab === 'banners' ? 'default' : 'ghost'} onClick={() => setActiveTab('banners')}>배너 관리</Button>
+        <Button variant={activeTab === 'notices' ? 'default' : 'ghost'} onClick={() => setActiveTab('notices')}>공지사항 관리</Button>
       </div>
 
       {/* 초대 코드 관리 탭 */}
@@ -382,7 +369,7 @@ export default function AdminPage() {
       {activeTab === 'users' && (
         <Card>
           <CardHeader>
-            <CardTitle>사용자 목록</CardTitle>
+            <CardTitle>사용자 관리</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -394,6 +381,9 @@ export default function AdminPage() {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <h3 className="font-semibold">{user.name || '이름 없음'}</h3>
+                        {isRecentUser(user.createdAt) && (
+                          <Badge variant="outline" className="bg-green-100 text-green-700 border-green-200 ml-1">최근</Badge>
+                        )}
                         <Badge variant={user.role === 'ADMIN' ? 'default' : 'secondary'}>
                           {user.role}
                         </Badge>

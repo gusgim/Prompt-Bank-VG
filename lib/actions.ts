@@ -2328,6 +2328,13 @@ export async function toggleNoticeStatusAction(noticeId: string): Promise<{ succ
  */
 export async function incrementNoticeViewAction(noticeId: string): Promise<{ success: boolean; error?: string }> {
   try {
+    console.log('📊 공지사항 조회수 증가:', noticeId)
+    
+    const session = await auth()
+    if (!session?.user?.role || !['ADMIN', 'SUPER_ADMIN'].includes(session.user.role)) {
+      throw new Error('관리자 권한이 필요합니다.')
+    }
+
     await prisma.notice.update({
       where: { id: noticeId },
       data: {
@@ -2336,10 +2343,122 @@ export async function incrementNoticeViewAction(noticeId: string): Promise<{ suc
         }
       }
     })
-    
+
+    console.log('✅ 공지사항 조회수 증가 성공')
     return { success: true }
   } catch (error) {
-    console.error('공지사항 조회수 증가 에러:', error)
-    return { success: false, error: '조회수 증가 중 오류가 발생했습니다.' }
+    console.error('💥 공지사항 조회수 증가 오류:', error)
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.' 
+    }
+  }
+}
+
+// 신규 사용자 알림 생성
+export async function createNotificationAction(
+  type: string,
+  title: string,
+  message: string,
+  data?: any,
+  targetAdminIds?: string[]
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await prisma.notification.create({
+      data: {
+        type,
+        title,
+        message,
+        data: data ? JSON.stringify(data) : null,
+        targetAdminIds: targetAdminIds || []
+      }
+    })
+    
+    console.log(`✅ 알림 생성 완료: ${type} - ${title}`)
+    return { success: true }
+  } catch (error) {
+    console.error('💥 알림 생성 실패:', error)
+    return { success: false, error: '알림 생성에 실패했습니다.' }
+  }
+}
+
+// 관리자용 알림 조회
+export async function getNotificationsAction(): Promise<{ success: boolean; data?: any[]; error?: string }> {
+  try {
+    console.log('🔔 알림 목록 조회')
+    
+    const session = await auth()
+    if (!session?.user?.role || !['ADMIN', 'SUPER_ADMIN'].includes(session.user.role)) {
+      throw new Error('관리자 권한이 필요합니다.')
+    }
+
+    const notifications = await prisma.notification.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 50 // 최근 50개만 조회
+    })
+
+    console.log('✅ 알림 목록 조회 성공:', notifications.length, '개')
+    return { success: true, data: notifications }
+  } catch (error) {
+    console.error('💥 알림 목록 조회 오류:', error)
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : '알림 조회에 실패했습니다.' 
+    }
+  }
+}
+
+export async function getUnreadNotificationCountAction(): Promise<{ success: boolean; count?: number; error?: string }> {
+  try {
+    console.log('🔔 읽지 않은 알림 개수 조회')
+    
+    const session = await auth()
+    if (!session?.user?.role || !['ADMIN', 'SUPER_ADMIN'].includes(session.user.role)) {
+      throw new Error('관리자 권한이 필요합니다.')
+    }
+
+    const count = await prisma.notification.count({
+      where: {
+        isRead: false
+      }
+    })
+
+    console.log('✅ 읽지 않은 알림 개수 조회 성공:', count, '개')
+    return { success: true, count }
+  } catch (error) {
+    console.error('💥 읽지 않은 알림 개수 조회 오류:', error)
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : '알림 개수 조회에 실패했습니다.' 
+    }
+  }
+}
+
+export async function markNotificationAsReadAction(notificationId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    console.log('🔔 알림 읽음 처리:', notificationId)
+    
+    const session = await auth()
+    if (!session?.user?.role || !['ADMIN', 'SUPER_ADMIN'].includes(session.user.role)) {
+      throw new Error('관리자 권한이 필요합니다.')
+    }
+
+    await prisma.notification.update({
+      where: { id: notificationId },
+      data: {
+        isRead: true
+      }
+    })
+
+    console.log('✅ 알림 읽음 처리 성공')
+    return { success: true }
+  } catch (error) {
+    console.error('💥 알림 읽음 처리 오류:', error)
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : '알림 읽음 처리에 실패했습니다.' 
+    }
   }
 } 

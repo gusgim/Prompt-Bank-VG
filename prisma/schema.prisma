@@ -210,6 +210,25 @@ model AdminAccessLog {
   @@map("admin_access_logs")
 }
 
+// 관리자 알림 모델
+model Notification {
+  id        String   @id @default(uuid())
+  type      String   // 'new_user', 'user_expired', 'system_alert' 등
+  title     String   // 알림 제목
+  message   String   // 알림 내용
+  data      Json?    // 추가 데이터 (JSON)
+  isRead    Boolean  @default(false) // 읽음 여부
+  createdAt DateTime @default(now())
+  
+  // 알림을 받을 관리자들 (빈 배열이면 모든 관리자)
+  targetAdminIds String[] // 관리자 ID 배열
+  
+  @@index([type])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
 // 동의서 버전 관리 모델
 model ConsentVersion {
   id          String   @id @default(uuid())
