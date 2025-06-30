@@ -146,8 +146,9 @@ export function PromptCard({ prompt, onDelete }: PromptCardProps) {
             </div>
           )}
 
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex items-center space-x-2">
+          <div className="space-y-3 pt-2">
+            {/* 첫 번째 줄: 주요 액션 버튼들 */}
+            <div className="flex items-center space-x-2 flex-wrap gap-2">
               <Button
                 size="sm"
                 variant="outline"
@@ -177,7 +178,8 @@ export function PromptCard({ prompt, onDelete }: PromptCardProps) {
               </Link>
             </div>
 
-            <div className="flex items-center space-x-1">
+            {/* 두 번째 줄: 수정/삭제 버튼들 */}
+            <div className="flex items-center justify-end space-x-1 pt-1 border-t border-gray-100">
               <Link href={`/prompts/${prompt.id}/edit`}>
                 <Button
                   size="sm"

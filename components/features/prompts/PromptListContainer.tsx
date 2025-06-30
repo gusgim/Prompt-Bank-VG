@@ -138,7 +138,7 @@ export function PromptListContainer() {
       <div className="w-full px-6 py-6">
         <div className="flex flex-col xl:flex-row gap-6">
           {/* 왼쪽 사이드바 */}
-          <div className="xl:w-80 flex-shrink-0">
+          <div className="xl:w-72 flex-shrink-0">
           <FilterSidebar
             filters={filters}
             categories={categories}
