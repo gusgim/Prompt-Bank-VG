@@ -37,12 +37,6 @@ export default memo(function FilterSidebar({
   categories,
   tags
 }: FilterSidebarProps) {
-  console.log('🎛️ FilterSidebar 렌더링:', { 
-    categories: categories.length, 
-    tags: tags.length, 
-    currentFilters: filters 
-  })
-
   // 로컬 검색 상태 - 자동 검색 기능
   const [localQuery, setLocalQuery] = useState(filters.query || '')
   const [isTyping, setIsTyping] = useState(false)
@@ -51,7 +45,6 @@ export default memo(function FilterSidebar({
   // 검색 실행 함수
   const executeSearch = useCallback((query: string) => {
     const trimmedQuery = query.trim()
-    console.log('🔍 자동 검색 실행:', { 검색어: trimmedQuery })
     
     setIsTyping(false) // 검색 완료 시 타이핑 상태 해제
     onFiltersChange({ 
@@ -72,8 +65,6 @@ export default memo(function FilterSidebar({
 
   // 타이핑 처리 함수 (1.5초 디바운스)
   const handleQueryChange = useCallback((newValue: string) => {
-    console.log('⌨️ 검색어 입력:', { 이전: localQuery, 새값: newValue })
-    
     setLocalQuery(newValue)
     setIsTyping(newValue.trim().length > 0)
     
@@ -86,7 +77,7 @@ export default memo(function FilterSidebar({
     debounceTimerRef.current = setTimeout(() => {
       executeSearch(newValue)
     }, 1500)
-  }, [localQuery, executeSearch])
+  }, [executeSearch])
 
   // 컴포넌트 언마운트 시 타이머 정리
   useEffect(() => {
@@ -100,19 +91,11 @@ export default memo(function FilterSidebar({
   // 외부 필터 변경 시 로컬 상태 동기화 - 무한 루프 방지
   useEffect(() => {
     const externalQuery = filters.query || ''
-    console.log('🔄 외부 쿼리 동기화 확인:', { 외부: externalQuery, 현재로컬: localQuery })
     setLocalQuery(externalQuery)
   }, [filters.query]) // localQuery 의존성 제거로 무한 루프 방지
 
   const handleCategoryChange = useCallback((category: string) => {
-    console.log('📁 카테고리 변경 시도:', { 
-      클릭한_카테고리: category, 
-      현재_선택된_카테고리: filters.category,
-      동일한가: filters.category === category
-    })
-    
     const newCategory = filters.category === category ? undefined : category
-    console.log('📁 새 카테고리 설정:', newCategory)
     
     const newFilters = { 
       ...filters, 
@@ -120,23 +103,14 @@ export default memo(function FilterSidebar({
       page: 1 
     }
     
-    console.log('📁 카테고리 필터 변경 완료:', newFilters)
     onFiltersChange(newFilters)
   }, [filters, onFiltersChange])
 
   const handleTagChange = useCallback((tag: string) => {
-    console.log('🏷️ 태그 변경 시도:', { 
-      클릭한_태그: tag, 
-      현재_선택된_태그들: filters.tags,
-      이미_선택됨: filters.tags?.includes(tag)
-    })
-    
     const currentTags = filters.tags || []
     const newTags = currentTags.includes(tag)
       ? currentTags.filter(t => t !== tag)
       : [...currentTags, tag]
-    
-    console.log('🏷️ 새 태그 목록:', newTags)
     
     const newFilters = { 
       ...filters, 
@@ -144,12 +118,10 @@ export default memo(function FilterSidebar({
       page: 1 
     }
     
-    console.log('🏷️ 태그 필터 변경 완료:', newFilters)
     onFiltersChange(newFilters)
   }, [filters, onFiltersChange])
 
   const clearFilters = useCallback(() => {
-    console.log('🧹 모든 필터 초기화')
     setLocalQuery('')
     onFiltersChange({ page: 1 })
   }, [onFiltersChange])

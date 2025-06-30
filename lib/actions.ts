@@ -666,7 +666,7 @@ export async function getSharedPromptAction(shareId: string) {
     if (!prompt) {
       throw new Error('공유된 프롬프트를 찾을 수 없습니다.')
     }
-    
+
     const authorName = prompt.user ? (prompt.user.name || prompt.user.email) : 'Anonymous';
 
     return {

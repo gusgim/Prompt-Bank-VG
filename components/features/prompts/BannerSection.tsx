@@ -40,7 +40,6 @@ export function BannerSection() {
             if (banner.url && isYouTubeUrl(banner.url)) {
               // YouTube 썸네일만 자동 생성
               autoThumbnail = getAutoThumbnail(banner.url)
-              console.log('✅ YouTube 썸네일 생성:', autoThumbnail)
             }
             // 블로그나 일반 웹사이트는 관리자가 직접 업로드한 이미지만 사용
             
@@ -123,14 +122,7 @@ export function BannerSection() {
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement
-                            console.error('🚫 이미지 로딩 실패:', {
-                              url: imageUrl,
-                              originalUrl: banner.imageUrl,
-                              autoThumbnail: banner.autoThumbnail,
-                              isYouTube: isYouTubeUrl(banner.url),
-                              bannerUrl: banner.url,
-                              error: e
-                            })
+                            console.error('이미지 로딩 실패:', imageUrl)
                             target.style.display = 'none'
                             const parent = target.parentElement
                             if (parent) {
@@ -140,14 +132,6 @@ export function BannerSection() {
                               fallback.title = `이미지 로딩 실패: ${imageUrl}`
                               parent.appendChild(fallback)
                             }
-                          }}
-                          onLoad={() => {
-                            console.log('✅ 이미지 로딩 성공:', {
-                              url: imageUrl,
-                              originalUrl: banner.imageUrl,
-                              autoThumbnail: banner.autoThumbnail,
-                              isYouTube: isYouTubeUrl(banner.url)
-                            })
                           }}
                         />
                       )

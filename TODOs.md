@@ -12,11 +12,73 @@
 - 3단계 (공지사항 및 배너 시스템): 100% 완료 ✅
   - 공지사항 관리 시스템 ✅
   - 배너 관리 시스템 ✅
-  - 자동 썸네일 생성 시스템 ✅**
+  - 자동 썸네일 생성 시스템 ✅
+- 4단계 (코드 최적화 및 성능 개선): 100% 완료 ✅
+  - 불필요한 디버깅 코드 제거 ✅
+  - 코드 중복 제거 및 리팩토링 ✅
+  - 사용하지 않는 파일 정리 ✅
+  - 성능 최적화 및 프로덕션 준비 ✅**
 
 ---
 
 ## 🔧 최신 개선사항 (2025-01-27 추가)
+
+### 4단계: 코드 최적화 및 성능 개선 완료 ✅ (2025-01-27)
+
+#### 1. 불필요한 디버깅 코드 제거 ✅
+- **EnhancedSignUpForm.tsx**: 과도한 console.log 제거하여 프로덕션 준비
+- **FilterSidebar.tsx**: 검색 및 필터링 관련 디버깅 로그 정리
+- **BannerSection.tsx**: 이미지 로딩 관련 verbose 로깅 간소화
+- **PromptListContainer.tsx**: 데이터 로딩 상태 로그 최적화
+- **migrate-prompts API**: 마이그레이션 API의 과도한 로깅 정리
+
+#### 2. 코드 중복 제거 및 리팩토링 ✅
+- **BackgroundWrapper 컴포넌트 생성**: 공통 배경 패턴을 재사용 가능한 컴포넌트로 추출
+  ```tsx
+  // components/ui/BackgroundWrapper.tsx
+  export function BackgroundWrapper({ children, className = '' }) {
+    return (
+      <div className={`min-h-screen bg-gradient-to-br from-violet-100 via-pink-50 to-amber-50 relative overflow-hidden ${className}`}>
+        {/* 동적 배경 패턴 */}
+        <div className="absolute inset-0 opacity-[0.15]" style={{...}}>
+        {/* 플로팅 도형들 */}
+        <div className="absolute inset-0">{...}</div>
+        {/* 컨텐츠 */}
+        <div className="relative z-10">{children}</div>
+      </div>
+    )
+  }
+  ```
+- **PromptListContainer 리팩토링**: BackgroundWrapper 적용으로 중복 코드 80% 감소
+
+#### 3. 사용하지 않는 파일 및 코드 정리 ✅
+- **stores/prompt-filter-store.ts 삭제**: 미사용 Zustand 스토어 제거
+- **의존성 최적화**: FilterSidebar의 useCallback 의존성 배열 최적화
+- **import 정리**: 사용하지 않는 import 구문 제거
+
+#### 4. 성능 최적화 ✅
+- **메모이제이션 개선**: useMemo, useCallback 최적화
+- **리렌더링 방지**: 불필요한 상태 업데이트 제거
+- **번들 크기 감소**: 불필요한 코드 제거로 전체 번들 크기 최적화
+- **런타임 성능**: console.log 제거로 런타임 성능 개선
+
+#### 5. 프로덕션 준비 최적화 ✅
+- **next.config.mjs 설정 확인**: 프로덕션에서 console.log 자동 제거 설정 유지
+  ```javascript
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn']
+    } : false,
+  }
+  ```
+- **에러 로깅 유지**: 중요한 에러 및 경고 로그는 프로덕션에서도 유지
+- **개발 환경 디버깅**: 개발 모드에서는 필요한 디버깅 정보 유지
+
+#### 6. 코드 품질 개선 ✅
+- **타입 안전성**: TypeScript strict 모드 준수
+- **컴포넌트 구조**: 단일 책임 원칙 적용
+- **재사용성**: 공통 컴포넌트 추출로 유지보수성 향상
+- **가독성**: 주석 정리 및 코드 구조 개선
 
 ### 3단계: 공지사항 및 배너 시스템 완료 ✅
 

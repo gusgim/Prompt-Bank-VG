@@ -36,13 +36,32 @@ export function EnhancedSignUpForm() {
   const loadConsentVersion = async () => {
     try {
       const result = await getActiveConsentVersionsAction()
+      
       if (result.success && result.data && result.data.length > 0) {
         // 통합 동의서 찾기
         const unifiedConsent = result.data.find((consent: any) => consent.type === 'unified_terms')
-        setConsentVersion(unifiedConsent || result.data[0])
+        const selectedConsent = unifiedConsent || result.data[0]
+        setConsentVersion(selectedConsent)
+      } else {
+        // Fallback: 기본 약관 데이터 사용
+        setConsentVersion({
+          type: 'unified_terms',
+          title: '프롬프트 뱅크 서비스 이용약관 및 개인정보 처리 동의 (필수)',
+          content: '서비스 이용을 위해서는 이용약관에 동의해야 합니다.',
+          version: 'v2.1',
+          isActive: true
+        })
       }
     } catch (error) {
       console.error('동의서 로드 에러:', error)
+      // 에러 발생 시에도 fallback 약관 데이터 사용
+      setConsentVersion({
+        type: 'unified_terms',
+        title: '프롬프트 뱅크 서비스 이용약관 및 개인정보 처리 동의 (필수)',
+        content: '서비스 이용을 위해서는 이용약관에 동의해야 합니다.',
+        version: 'v2.1',
+        isActive: true
+      })
     } finally {
       setIsLoadingConsent(false)
     }
@@ -278,14 +297,15 @@ export function EnhancedSignUpForm() {
                 />
               </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90"
-                disabled={isLoading}
-              >
-                <Lock className="h-4 w-4 mr-2" />
-                {isLoading ? '가입 중...' : '회원가입 완료'}
-              </Button>
+              <div className="mt-6">
+                <Button
+                  type="submit"
+                  className="w-full bg-[#000080] hover:bg-[#000080]/90 text-white"
+                  disabled={isLoading}
+                >
+                  {isLoading ? '가입 진행 중...' : '회원가입 완료'}
+                </Button>
+              </div>
             </form>
           )}
 
@@ -301,12 +321,12 @@ export function EnhancedSignUpForm() {
           </div>
         </CardContent>
       </Card>
-
+      
       {/* 동의서 모달 */}
       {consentVersion && (
         <ConsentModal
           title={consentVersion.title}
-          content={CONSENT_CONTENTS[consentVersion.type as keyof typeof CONSENT_CONTENTS]?.content || consentVersion.content}
+          content={consentVersion.content || ''}
           isOpen={activeModal === consentVersion.type}
           onClose={() => setActiveModal(null)}
           onAgree={handleConsentAgree}

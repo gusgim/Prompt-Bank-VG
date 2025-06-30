@@ -8,6 +8,7 @@ import { useToast } from '@/components/ui/Toast'
 import { getPromptsAction, getCategoriesAction, getTagsAction } from '@/lib/actions'
 import { BannerSection } from './BannerSection'
 import { ImportantNoticesBanner } from '@/components/features/notices/ImportantNoticesBanner'
+import { BackgroundWrapper } from '@/components/ui/BackgroundWrapper'
 
 export function PromptListContainer() {
   const [filters, setFilters] = useState<PromptFilters>({ page: 1 })
@@ -119,25 +120,8 @@ export function PromptListContainer() {
   // 초기화 전에는 로딩 스피너 표시
   if (!isInitialized || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-violet-100 via-pink-50 to-amber-50 relative overflow-hidden">
-        {/* 동적 배경 패턴 */}
-        <div className="absolute inset-0 opacity-[0.15]" style={{
-          backgroundImage: `
-            radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.1) 2px, transparent 2px),
-            linear-gradient(135deg, rgba(168, 85, 247, 0.05) 25%, transparent 25%),
-            linear-gradient(-45deg, rgba(236, 72, 153, 0.05) 25%, transparent 25%)
-          `,
-          backgroundSize: '40px 40px, 60px 60px, 80px 80px'
-        }}></div>
-        
-        {/* 플로팅 도형들 */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-violet-200/30 to-purple-300/30 rounded-full blur-xl"></div>
-          <div className="absolute top-60 right-32 w-24 h-24 bg-gradient-to-br from-pink-200/30 to-rose-300/30 rounded-full blur-lg"></div>
-          <div className="absolute bottom-40 left-40 w-20 h-20 bg-gradient-to-br from-amber-200/30 to-orange-300/30 rounded-full blur-lg"></div>
-        </div>
-        
-        <div className="w-full px-6 py-6 relative z-10">
+      <BackgroundWrapper>
+        <div className="w-full px-6 py-6">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full mx-auto mb-4"></div>
@@ -145,31 +129,13 @@ export function PromptListContainer() {
             </div>
           </div>
         </div>
-      </div>
+      </BackgroundWrapper>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-100 via-pink-50 to-amber-50 relative overflow-hidden">
-      {/* 동적 배경 패턴 */}
-      <div className="absolute inset-0 opacity-[0.15]" style={{
-        backgroundImage: `
-          radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.1) 2px, transparent 2px),
-          linear-gradient(135deg, rgba(168, 85, 247, 0.05) 25%, transparent 25%),
-          linear-gradient(-45deg, rgba(236, 72, 153, 0.05) 25%, transparent 25%)
-        `,
-        backgroundSize: '40px 40px, 60px 60px, 80px 80px'
-      }}></div>
-      
-      {/* 플로팅 도형들 */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-violet-200/30 to-purple-300/30 rounded-full blur-xl"></div>
-        <div className="absolute top-60 right-32 w-24 h-24 bg-gradient-to-br from-pink-200/30 to-rose-300/30 rounded-full blur-lg"></div>
-        <div className="absolute bottom-40 left-40 w-20 h-20 bg-gradient-to-br from-amber-200/30 to-orange-300/30 rounded-full blur-lg"></div>
-        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-gradient-to-br from-emerald-200/30 to-teal-300/30 rounded-full blur-md"></div>
-      </div>
-      
-      <div className="w-full px-6 py-6 relative z-10">
+    <BackgroundWrapper>
+      <div className="w-full px-6 py-6">
         <div className="flex flex-col xl:flex-row gap-6">
           {/* 왼쪽 사이드바 */}
           <div className="xl:w-80 flex-shrink-0">
@@ -191,17 +157,17 @@ export function PromptListContainer() {
             <div className="text-sm text-gray-500">
               {promptsData?.pagination ? (
                 <>
-                    총 <span className="font-semibold text-gray-700">{promptsData.pagination.total}</span>개의 프롬프트
-                  {filters.query && (
-                    <span className="ml-2">
-                      ("<span className="font-medium">{filters.query}</span>" 검색 결과)
-                    </span>
-                  )}
-                  {filters.category && (
-                    <span className="ml-2">
-                      (<span className="font-medium">{filters.category}</span> 카테고리)
-                    </span>
-                  )}
+                      총 <span className="font-semibold text-gray-700">{promptsData.pagination.total}</span>개의 프롬프트
+                    {filters.query && (
+                      <span className="ml-2">
+                        ("<span className="font-medium">{filters.query}</span>" 검색 결과)
+                      </span>
+                    )}
+                    {filters.category && (
+                      <span className="ml-2">
+                        (<span className="font-medium">{filters.category}</span> 카테고리)
+                      </span>
+                    )}
                 </>
               ) : (
                 '프롬프트 개수 확인 중...'
@@ -269,6 +235,7 @@ export function PromptListContainer() {
               <BannerSection />
             </div>
           </div>
+        </div>
       </div>
       
       {/* 모바일 PC버전 전환 버튼 */}
@@ -295,7 +262,6 @@ export function PromptListContainer() {
           더 넓은 화면에서 프롬프트를 관리하세요
         </p>
       </div>
-    </div>
-    </div>
+    </BackgroundWrapper>
   )
 } 
